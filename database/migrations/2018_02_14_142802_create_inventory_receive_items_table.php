@@ -20,6 +20,7 @@ class CreateInventoryReceiveItemsTable extends Migration
             $table->integer('quantity')->default(0);
             $table->string('lot_number')->nullable();
             $table->date('date_expired')->nullable();
+            $table->decimal('price',11,2)->default(0);
             $table->timestamps();
 
             $table->foreign('inventory_receive_id')->references('id')->on('inventory_receives');

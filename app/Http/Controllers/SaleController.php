@@ -6,6 +6,7 @@ use Request;
 use App\Customer;
 use App\Sale;
 use DB;
+use App\SaleDiscount;
 use Carbon\Carbon;
 
 class SaleController extends Controller
@@ -138,6 +139,16 @@ class SaleController extends Controller
     }
 
 
+    public function discount($trans)
+    {
+        $all = Request::all();
+
+        SaleDiscount::updateOrCreate(['transcode'=>$trans],$all);
+        session()->flash('success_message', 'Discount updated successfully.');
+        return redirect()->back();
+    }
+
+
     public function printPayment($trans)
     {
         $sale = Sale::where('transcode', $trans)->first();
@@ -149,9 +160,16 @@ class SaleController extends Controller
             'Date' => Carbon::parse($sale->created_at)->toFormattedDateString(),
         ];
 
+        $discount = 0;
+        $saleDiscount = SaleDiscount::where('transcode',$trans)->first();
+        
+        if ( $saleDiscount != NULL ) {
+            $discount = $saleDiscount->amount;
+        }
+
         
 
-        return view('sale.print',compact('info','transList','sale','totalAmount'));
+        return view('sale.print',compact('info','transList','sale','totalAmount','discount'));
     }
 
     public function voidSales($id)
@@ -196,7 +214,12 @@ class SaleController extends Controller
     {
         $info = Customer::findOrFail($id);
         $sale = Sale::where('transcode', $trans)->get();
-
+        $discount = 0;
+        $saleDiscount = SaleDiscount::where('transcode',$trans)->first();
+        
+        if ( $saleDiscount != NULL ) {
+            $discount = $saleDiscount->amount;
+        }
 
 
         $info = Customer::with(['sales','payments','agency','transmittal'])->findOrFail($id);
@@ -215,13 +238,13 @@ class SaleController extends Controller
         }
 
         $grandTotal = $grandTotal - $totalPay;
-        $totalAmount = $info->sales()->where('transcode', $trans)->sum('total_price');
+        $totalAmount = $info->sales()->where('transcode', $trans)->sum('total_price') - $discount;
 
         $info = array_add($info, 'agencyName', $info->agency()->orderBy('created_at','desc')->first()->name);   
 
         // dd($sale);
 
-        return view('sale.list', compact('customer','info','grandTotal','trans', 'sales','saleFirst','totalAmount'));
+        return view('sale.list', compact('customer','info','grandTotal','trans', 'sales','saleFirst','totalAmount','discount'));
     }
 
 }

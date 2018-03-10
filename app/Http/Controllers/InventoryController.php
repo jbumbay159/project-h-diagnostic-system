@@ -35,6 +35,7 @@ class InventoryController extends Controller
     				'quantity' => $items['qty'],
     				'date_expired' => $items['exp_date'],
     				'lot_number' => $items['lot_number'],
+                    'price' => $items['price'],
     			];
     			$inventoryItems->items()->create($data);
     		}
@@ -129,6 +130,7 @@ class InventoryController extends Controller
         $all = array_add($all,'unit',$receiveItems['unit']);
         $all = array_add($all,'prodName',$receiveItems['prodName']);
         $all = array_add($all,'remarks',$receiveItems['remarks']);
+        $all = array_add($all,'price',$receiveItems['price']);
 
         session()->push('receive.items', $all);
         session()->flash('success_message', 'Item Updated Successfully');
@@ -227,7 +229,7 @@ class InventoryController extends Controller
 
     public function data()
     {
-    	$data = Supply::with(['inventoryReceive','inventoryLabResultItem'])->get();
+    	$data = Supply::get();
 
         return DataTables::of($data)
         ->addColumn('qty',function ($item) {
@@ -253,11 +255,51 @@ class InventoryController extends Controller
                     </div>
                 </div>';
         })
-        
   		->make(true);
     }
 
+    public function filter($type)
+    {
+        $supplies = [];
+        if ($type == 'critical-level') {
+            $supplies = Supply::get()->where('currentQty','=<','minimumQtyNoTest');
+        }elseif ($type == 'expired') {
+            $items = Supply::where('id',8)->get();
+            foreach ($items as $item) {
+                $currentQty = $item->currentQty;
+                $itemArray[] = 0;
+                
+                // foreach ($item->inventoryReceive()->orderBy('created_at','DESC')->get() as $receive) {
+                //     $sumqty = 0;
+                //     foreach ($itemArray as $qty) {
+                //         $sumqty += $qty;
+                //     }
+                //     $totalQty = $currentQty - $sumqty;
+                //     if ($totalQty < $receive->quantity) {
+                //         $itemArray[] =  $totalQty - $receive->quantity;    
+                //     }else{
+                //         $itemArray[] = $receive->quantity;
+                //     }
 
 
+                    
+                    
+                //     dump($totalQty);
+                    
+                    
+                // }
+            }
+
+            // dd($currentQty);
+
+
+
+            $supplies = InventoryReceiveItem::get();
+
+            // dd($supplies);
+        }
+
+        // return view('inventory.filter',compact('supplies','type'));
+    }
     
 }

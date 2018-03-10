@@ -8,7 +8,8 @@
     <div class="col-md-6">
         <div class="pull-right">
             @if($saleFirst->status == 0)
-                <button type="button" class="btn btn-primary" >Add Discount</button>
+                <!-- <button type="button" class="btn btn-primary" >Add Discount</button> -->
+                <a href="#discount" data-toggle="modal" class="btn btn-primary">Discount</a>
                 <button type="button" class="btn btn-primary">Add Services</button>
                 <a href="#accept-payment" data-toggle="modal" class="btn btn-success">Accept Payment</a>
             @elseif($saleFirst->status == 1)
@@ -97,6 +98,12 @@
                                         <td class="text-center">{{ number_format($sale->total_price, 2) }}</td>
                                     </tr>
                                 @endforeach
+                                @if( $discount !=0 )
+                                    <tr>
+                                        <td class="text-right"><b>Discount:</b></td>
+                                        <td class="text-center">-{{ $discount }}</td>
+                                    </tr>
+                                @endif
                                 <tr>
                                     <td class="text-right"><b>Total Amount:</b></td>
                                     <td class="text-center"><b>{{ number_format($totalAmount, 2) }}</b></td>
@@ -126,6 +133,39 @@
                         <div class="form-group">
                             {!! Form::label('payment_id','Select Payment Mode') !!}
                             {!! Form::select('payment_id',['1'=>'CASH','2'=>'BILLED'],null,['class'=>'form-control select']) !!}
+                        </div>
+                    </div>
+                </div>  
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
+                            {!! Form::submit('ACCEPT PAYMENT', ['class'=>'btn btn-primary','style'=>'margin-top:0px;']) !!}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {!! Form::close() !!}
+        </div>
+    </div>
+</div>
+
+<div class="modal bounceIn animated" tabindex="-1" role="dialog" id="discount" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myLargeModalLabel">Discount</h4>
+            </div>
+            {!! Form::open(['action' => ['SaleController@discount', $trans]]) !!}
+            <div class="modal-body">    
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            {!! Form::label('amount','Amount') !!}
+                            {!! Form::number('amount',$discount,['class'=>'form-control','step'=>'0.01']) !!}
                         </div>
                     </div>
                 </div>  

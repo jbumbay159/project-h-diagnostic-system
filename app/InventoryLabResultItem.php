@@ -11,6 +11,8 @@ class InventoryLabResultItem extends Model
         'customer_id' , 'sale_id','lab_result_id','supply_id','testqty','status',
     ];
 
+    protected $guarded = ['_token','_method'];
+
 
     public function getDateReceiveAttribute()
     {

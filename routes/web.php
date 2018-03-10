@@ -68,6 +68,9 @@ Route::post('supplies/import','SupplyController@importData');
 
 
 //Inventory Section
+
+Route::get('inventory/filter/{type}','InventoryController@filter');
+
 Route::get('inventory/data','InventoryController@data');
 
 Route::get('inventory/receive','InventoryController@receive');
@@ -93,6 +96,7 @@ Route::resource('agency-pricing','AgencyPricingController', ['except' => ['show'
 //Sale Section
 Route::patch('sale/payment/{trans}','SaleController@acceptPayment');
 Route::get('sale/payment/{trans}/print','SaleController@printPayment');
+Route::post('sale/discount/{trans}','SaleController@discount');
 Route::resource('sale','SaleController', ['except' => ['destroy','create','edit']]);
 Route::patch('sale/{id}/void','SaleController@voidSales');
 Route::get('sale/{id}/transaction/{trans}','SaleController@list');

@@ -12,7 +12,7 @@
 	<div class="panel-body">
 		{!! Form::open(['action' => 'InventoryController@addReceiveItem']) !!}
 		<div class="row">
-			<div class="col-md-4">
+			<div class="col-md-3">
 				<div class="form-group">
 					{!! Form::label('Product Name') !!}
 					{!! Form::select('supply',$supply,null,['class'=>'form-control select','placeholder'=>'PLEASE SELECT']) !!}
@@ -24,12 +24,18 @@
 					{!! Form::text('lot_number',NULL,['class'=>'form-control']) !!}
 				</div>
 			</div>
-			<div class="col-md-2">
+			<div class="col-md-1">
 				<div class="form-group">
 					{!! Form::label('Quantity') !!}
 					{!! Form::number('qty',0,['class'=>'form-control']) !!}
 				</div>
 			</div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    {!! Form::label('Price per test') !!}
+                    {!! Form::number('price',0,['class'=>'form-control','step'=>0.01]) !!}
+                </div>
+            </div>
 
 			<div class="col-md-2">
 				<div class="form-group">
@@ -50,6 +56,7 @@
         		<tr>
         			<th class="text-center">Name</th>
                     <th width="150" class="text-center">Qty</th>
+                    <th width="150" class="text-center">Price per test</th>
                     <th width="150" class="text-center">Lot Number</th>
                     <th width="150" class="text-center">Expiry Date</th>
                     <th width="100" class="text-center">Action</th>
@@ -61,6 +68,7 @@
 		        		<tr>
 		        			<td>{{ $items['prodName'] }}</td>
 		        			<td class="text-center">{{ $items['qty'].' '.$items['unit'] }}</td>
+                            <td class="text-center">&#x20B1; {{ $items['price'] }}</td>
 		        			<td class="text-center">{{ $items['lot_number'] }}</td>
 		        			<td class="text-center">{{ $items['exp_date'] }}</td>
 		        			<td class="text-center" style="padding: 5px;">

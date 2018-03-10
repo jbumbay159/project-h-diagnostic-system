@@ -18,6 +18,12 @@ class Supply extends Model
     	return "{$this->minExpQty} {$this->unit} / {$totalTest} Test";
     }
 
+    public function getMinimumQtyNoTestAttribute($value='')
+    {
+        $totalTest = $this->minExpQty *  $this->test_per_unit;
+        return "{$this->minExpQty}";
+    }
+
     public function getUpdatedDateAttribute()
     {
     	return Carbon::parse($this->updated_at)->toFormattedDateString();
@@ -48,7 +54,7 @@ class Supply extends Model
             $totalQty = bcdiv($totalAvail, 1, 1);
 
             list($resultInt, $resultDecimal) = explode(".", $totalQty);
-            $quantity = ($resultDecimal != 0) ? number_format($totalQty,1) : number_format($resultInt, 0);
+            $quantity = ($resultDecimal != 0) ? $totalQty : $resultInt;
         }
 
         

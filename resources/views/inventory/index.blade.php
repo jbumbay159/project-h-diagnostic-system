@@ -4,10 +4,18 @@
 <div class="panel panel-primary">
 	<div class="panel-heading">
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-md-3">
 				<h3 class="panel-title" style="margin-top: 5px;">Inventory Module</h3>
 			</div>
 			<div class="col-md-6">
+				 <center>
+				 	<a href="{{ action('InventoryController@index') }}" class="btn btn-default btn-sm btn-quirk"> All</a>
+				 	<a href="{{ action('InventoryController@filter','critical-level') }}" class="btn btn-success btn-sm btn-quirk"> Critical Level</a>
+				 	<a href="{{ action('InventoryController@filter','expired') }}" class="btn btn-danger btn-sm btn-quirk"> Expired</a>
+				 	<a href="{{ action('InventoryController@filter','nearing-expiry') }}" class="btn btn-warning btn-sm btn-quirk"> Nearing Expiring</a>
+				 </center>
+			</div>
+			<div class="col-md-3">
 				<div class="clearfix">
 					<a href="{{ action('SupplyController@create') }}" class="btn btn-default btn-sm btn-quirk pull-right"><span class="glyphicon glyphicon-plus"></span> Create Entry</a>
 				</div>

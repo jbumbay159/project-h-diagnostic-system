@@ -34,9 +34,15 @@
 							<td style="text-align: center;">{{ number_format($list->total_price,2) }}</td>
 						</tr>
 					@endforeach
+					@if( $discount != 0 )
+						<tr>
+							<td class="text-right"><b>Discount:</b></td>
+							<td class="text-center">-{{ number_format($discount,2) }}</td>
+						</tr>
+					@endif
 					<tr>
 						<td style="text-align: right;font-weight: bold">Total Amount</td>
-						<td style="text-align: center;font-weight: bold">{{ number_format($totalAmount, 2) }}</td>
+						<td style="text-align: center;font-weight: bold">{{ number_format($totalAmount-$discount, 2) }}</td>
 					</tr>
 				</table>
 			</div>

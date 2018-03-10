@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class InventoryReceiveItem extends Model
 {
     protected $fillable = [
-        'inventory_receive_id' , 'supply_id','quantity','lot_number','date_expired',
+        'inventory_receive_id' , 'supply_id','quantity','lot_number','date_expired','price'
     ];
 
     protected $touches = ['supply'];
