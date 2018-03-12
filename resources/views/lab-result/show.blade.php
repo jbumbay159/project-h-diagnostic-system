@@ -106,6 +106,7 @@
                                 <th class="text-center">Available Test</th>
                                 <th>Action</th>
                             </thead>
+                            <tbody>
                             @foreach($labResults as $data)
                                 @if( $data->isxray == 0 )
                                 <tr>
@@ -116,6 +117,7 @@
                                 </tr>
                                 @endif
                             @endforeach
+                            </tbody>
                         </table>
                     </div>
                 </div>  

@@ -1,3 +1,8 @@
+@php 
+	$grandTotal = 0;
+
+@endphp
+
 <!DOCTYPE html>
 <html>
 	<head>
@@ -49,9 +54,12 @@
 						</tr>
 						@endforeach
 						<tr>
-							<td class="gt" colspan="4" style="text-align:right;"> GRAND TOTAL</td>	
+							<td class="gt" colspan="4" style="text-align:right;"> TOTAL</td>	
 							<td class="gt">{{ number_format($a,2) }}</td>	
 						</tr>
+						@php 
+							$grandTotal += $a;
+						@endphp
 					</tbody>
 				</table>
 				@endif
@@ -87,15 +95,21 @@
 						</tr>
 						@endforeach
 						<tr>
-							<td class="gt" colspan="4" style="text-align:right;"> GRAND TOTAL</td>	
+							<td class="gt" colspan="4" style="text-align:right;"> TOTAL</td>	
 							<td class="gt">{{ number_format($a,2) }}</td>	
 						</tr>
+						@php 
+							$grandTotal += $a;
+						@endphp
 					</tbody>
 				</table>
 				@endif
 				<!-- End All Credit list  -->
 				
 				@endforeach
+			</div>
+			<div class="row">
+				<p class="text-right" style="font-weight: bold;font-size: 20px;">GRAND TOTAL: <u>{{ number_format($grandTotal,2) }}</u></p>
 			</div>
 			<div class="row">
 				<p>PREPARED BY: CASHIER NAME HERE</p>

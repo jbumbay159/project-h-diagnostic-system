@@ -82,7 +82,7 @@
                             <li>
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-logged" data-toggle="dropdown">
-                                        {{ Auth::user()->name }}<span class="caret"></span>
+                                        {{ Auth::user()->fullName }}<span class="caret"></span>
                                      </button>
                                     <ul class="dropdown-menu pull-right">
                                         <li><a href="{{ route('logout') }}"
@@ -107,8 +107,8 @@
                     <div class="media leftpanel-profile">
                         <div class="media-left"></div>
                         <div class="media-body">
-                            <h4 class="media-heading">User</h4>
-                            <span>Administrator</span>
+                            <h4 class="media-heading">{{ Auth::user()->fullName }}</h4>
+                            <span>{{ Auth::user()->position }}</span>
                         </div>
                     </div>
                     <div class="tab-content">
@@ -137,12 +137,13 @@
                                         <li class="{{ Request::is('vaccine/*') || Request::is('vaccine') ? 'active' : '' }}"><a href="{{ url('vaccine') }}">Search</a></li>
                                     </ul>
                                 </li>
-                                <!-- <li class="nav-parent {{ Request::is('xray-result/*') || Request::is('xray-result') ? 'active' : '' }}">
+                                <li class="nav-parent {{ Request::is('xray-result/*') || Request::is('xray-result') || Request::is('xray-result-radiologist/*') || Request::is('xray-result-radiologist') ? 'active' : '' }}">
                                     <a href=""><i class="fa fa-pencil-square-o"></i> <span>X-RAY RESULT</span></a>
                                     <ul class="children">
-                                        <li class="{{ Request::is('xray-result/*') || Request::is('xray-result') ? 'active' : '' }}"><a href="{{ url('lab-result') }}">Search</a></li>
+                                        <li class="{{ Request::is('xray-result/*') || Request::is('xray-result') ? 'active' : '' }}"><a href="{{ url('xray-result') }}">Search</a></li>
+                                        <li class="{{ Request::is('xray-result-radiologist/*') || Request::is('xray-result-radiologist') ? 'active' : '' }}"><a href="{{ url('xray-result-radiologist') }}">Radiologist</a></li>
                                     </ul>
-                                </li> -->
+                                </li>
                                 <li class="nav-parent {{ Request::is('transmittal/*') || Request::is('transmittal') ? 'active' : '' }}">
                                     <a href=""><i class="fa fa-check-square"></i> <span>TRANSMITTAL</span></a>
                                     <ul class="children">

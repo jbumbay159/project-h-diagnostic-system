@@ -32,7 +32,7 @@
 					</thead>
 					<tbody>
 						@php
-							$a = 0;
+							$totalCash = 0;
 						@endphp
 						@foreach( \App\Sale::where('payment_id',1)->whereDate('created_at','>=',$date_from)->whereDate('created_at','<=',$date_to)->get() as $data)
 						<tr>
@@ -40,16 +40,16 @@
 							<td class="text-center">{{ \Carbon\Carbon::parse($data->created_at)->toFormattedDateString() }}</td>
 							<td class="text-center">{{ $data->customer->last_name }}, {{ $data->customer->first_name }} {{ $data->customer->middle_name }} {{ $data->customer->name_extension }}</td>
 							<td class="text-center">{{ $data->agency->name }}</td>
-							<td class="text-center">{{ ($data->payment_id == 1) ? 'CASH' : 'CREDIT' }}</td>
-							<td>{{ number_format($data->total_price,2) }}</td>
+							<td class="text-center">{{ ($data->payment_id == 1) ? 'CASH' : 'BILLED' }}</td>
+							<td class="text-center">{{ number_format($data->total_price,2) }}</td>
 							@php 
-								$a +=$data->total_price; 
+								$totalCash +=$data->total_price; 
 							@endphp
 						</tr>
 						@endforeach
 						<tr>
-							<td class="gt" colspan="5" style="text-align:right;"> GRAND TOTAL</td>	
-							<td class="gt">{{ number_format($a,2) }}</td>	
+							<td class="gt" colspan="5" style="text-align:right;"> TOTAL</td>	
+							<td class="gt">{{ number_format($totalCash,2) }}</td>	
 						</tr>
 					</tbody>
 				</table>
@@ -71,7 +71,7 @@
 					</thead>
 					<tbody>
 						@php
-							$a = 0;
+							$totalBilled = 0;
 						@endphp
 						@foreach( \App\Sale::where('payment_id',2)->whereDate('created_at','>=',$date_from)->whereDate('created_at','<=',$date_to)->get() as $data)
 						<tr>
@@ -79,21 +79,24 @@
 							<td class="text-center">{{ \Carbon\Carbon::parse($data->created_at)->toFormattedDateString() }}</td>
 							<td class="text-center">{{ $data->customer->last_name }}, {{ $data->customer->first_name }} {{ $data->customer->middle_name }} {{ $data->customer->name_extension }}</td>
 							<td class="text-center">{{ $data->agency->name }}</td>
-							<td class="text-center">{{ ($data->payment_id == 1) ? 'CASH' : 'CREDIT' }}</td>
-							<td>{{ number_format($data->total_price,2) }}</td>
+							<td class="text-center">{{ ($data->payment_id == 1) ? 'CASH' : 'BILLED' }}</td>
+							<td class="text-center">{{ number_format($data->total_price,2) }}</td>
 							@php 
-								$a +=$data->total_price; 
+								$totalBilled +=$data->total_price; 
 							@endphp
 						</tr>
 						@endforeach
 						<tr>
-							<td class="gt" colspan="5" style="text-align:right;"> GRAND TOTAL</td>	
-							<td class="gt">{{ number_format($a,2) }}</td>	
+							<td class="gt" colspan="5" style="text-align:right;"> TOTAL</td>	
+							<td class="gt">{{ number_format($totalBilled,2) }}</td>	
 						</tr>
 					</tbody>
 				</table>
 			</div>
 			<!-- END CREDIT LIST -->
+			<div class="row">
+				<p class="text-right" style="font-weight: bold;font-size: 20px;">GRAND TOTAL: <u>{{ number_format($totalCash + $totalBilled,2) }}</u></p>
+			</div>
 			<div class="row">
 				<p>PREPARED BY: CASHIER NAME HERE</p>
 			</div>

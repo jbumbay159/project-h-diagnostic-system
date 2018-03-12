@@ -111,6 +111,9 @@ Route::resource('lab-result','LabResultController', ['except' => ['destroy','cre
 Route::get('lab-result/{$id}/print','LabResultController@printResult');
 
 
+Route::resource('xray-result','XrayController', ['except' => ['destroy','create']]);
+Route::get('xray-result-radiologist','XrayController@radiologist');
+
 // Vaccing Section
 Route::resource('vaccine','VaccineController', ['except' => ['destroy','create']]);
 
