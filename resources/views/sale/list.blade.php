@@ -10,7 +10,7 @@
             @if($saleFirst->status == 0)
                 <!-- <button type="button" class="btn btn-primary" >Add Discount</button> -->
                 <a href="#discount" data-toggle="modal" class="btn btn-primary">Discount</a>
-                <button type="button" class="btn btn-primary">Add Services</button>
+                <a href="#add-service" data-toggle="modal" class="btn btn-primary">Add Services</a>
                 <a href="#accept-payment" data-toggle="modal" class="btn btn-success">Accept Payment</a>
             @elseif($saleFirst->status == 1)
                 <a href="{{ action('SaleController@printPayment',$trans) }}" target="_blank" class="btn btn-success">Print</a>
@@ -95,18 +95,18 @@
                                 @foreach( $sales as $sale )
                                     <tr>
                                         <td>{{ $sale->name }}  @ 1 x {{ number_format($sale->total_price, 2) }}</td>
-                                        <td class="text-center">{{ number_format($sale->total_price, 2) }}</td>
+                                        <td class="text-right">{{ number_format($sale->total_price, 2) }}</td>
                                     </tr>
                                 @endforeach
                                 @if( $discount !=0 )
                                     <tr>
                                         <td class="text-right"><b>Discount:</b></td>
-                                        <td class="text-center">-{{ $discount }}</td>
+                                        <td class="text-right">-{{ $discount }}</td>
                                     </tr>
                                 @endif
                                 <tr>
                                     <td class="text-right"><b>Total Amount:</b></td>
-                                    <td class="text-center"><b>{{ number_format($totalAmount, 2) }}</b></td>
+                                    <td class="text-right"><b>{{ number_format($totalAmount, 2) }}</b></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -175,7 +175,41 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
-                            {!! Form::submit('ACCEPT PAYMENT', ['class'=>'btn btn-primary','style'=>'margin-top:0px;']) !!}
+                            {!! Form::submit('SAVE DISCOUNT', ['class'=>'btn btn-primary','style'=>'margin-top:0px;']) !!}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {!! Form::close() !!}
+        </div>
+    </div>
+</div>
+
+
+<div class="modal bounceIn animated" tabindex="-1" role="dialog" id="add-service" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myLargeModalLabel">Add Service</h4>
+            </div>
+            {!! Form::open(['action' => ['SaleController@addService', $trans]]) !!}
+            <div class="modal-body">    
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            {!! Form::label('Select Service') !!}
+                            {!! Form::select('service_id',$serviceList,null,['class'=>'form-control select','placeholder'=>'Please Select Services']) !!}
+                        </div>
+                    </div>
+                </div>  
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
+                            {!! Form::submit('ADD SERVICE', ['class'=>'btn btn-primary','style'=>'margin-top:0px;']) !!}
                         </div>
                     </div>
                 </div>

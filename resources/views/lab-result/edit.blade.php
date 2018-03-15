@@ -1,3 +1,6 @@
+@php
+    use Carbon\Carbon;
+@endphp
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,25 +18,50 @@
 
     <link rel="stylesheet" href="<?php echo asset('public/quirk/css/quirk.css') ?>">
     <style type="text/css">
-         @media print {
-        button {
-            display: none !important;
+        @media print {
+            button {
+                display: none !important;
+            }
+                input,
+                textarea {
+                border: none !important;
+                box-shadow: none !important;
+                outline: none !important;
+            }
         }
-            input,
-            textarea {
-            border: none !important;
-            box-shadow: none !important;
-            outline: none !important;
-        }
-        }
+
+
+
+
     </style>
+    @if( $data->is_done == 1 )
+        <style type="text/css">
+                button {
+                    display: none !important;
+                }
+                    input,
+                    textarea {
+                    border: none !important;
+                    box-shadow: none !important;
+                    outline: none !important;
+                }
+        </style>
+    @endif
 </head>
 <body style="background-color: #fff;color: #000000;">
 
 
 
+@if( $data->is_done != 1 )
+        <button type="button" onclick="event.preventDefault();document.getElementById('labResult').submit();">Save</button>
+        <hr>
+@endif
+
 {!! Form::model($labResult, ['method'=>'patch','id'=>'labResult', 'action' => ['LabResultController@update', $labResult->id]]) !!}
         <div class="container-fluid">
+            <div class="row">
+                
+            </div>
             <div class="row">
                 <div class="col-md-12">
                     <p class="text-center">
@@ -56,7 +84,7 @@
                                 <td class="label-text">NAME</td>
                                 <td class="text">{{ $info->fullName }}</td>
                                 <td class="label-text">DATE</td>
-                                <td class="text">9999-99-99</td>
+                                <td class="text">{{ Carbon::now()->toFormattedDateString() }}</td>
                             </tr>
                             <tr>
                                 <td class="label-text">AGE</td>
@@ -101,7 +129,7 @@
                                             @if($data->covnv('normal_values') == true)
                                                 <td><center>{{ $serviceItem->normal_values }}</center></td>
                                             @endif
-                                            <td class="text"><center>{!! Form::text('remarks_val[]',$serviceItem->remarks,['class'=>'inputs','style'=>'text-align:center;']) !!}</center></td>
+                                            <td><center>{!! Form::text('remarks_val[]',$serviceItem->remarks,['style'=>'text-align:center;']) !!}</center></td>
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -159,9 +187,7 @@
                     </center>
                 </div>
             </div>
-            @if( $data->is_done != 1 )
-            {!! Form::submit('Direct') !!}
-            @endif
+            
         </div>
         {{ Form::close() }}
             <script src="<?php echo asset('public/quirk/lib/jquery/jquery.js') ?>"></script>

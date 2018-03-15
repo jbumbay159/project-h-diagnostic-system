@@ -54,6 +54,7 @@
         </table>
 	</div>
 </div>
+
 <div class="modal bounceIn animated" tabindex="-1" role="dialog" id="create" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

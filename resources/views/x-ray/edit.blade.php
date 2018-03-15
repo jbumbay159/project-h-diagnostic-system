@@ -45,27 +45,43 @@
                 <img src="{{ $xrayResult->customer->photos }}" width="100%">
             </div>
         </div>
-
-        {!! Form::model($xrayResult, ['method'=>'PATCH','action'=>['XrayController@update', $xrayResult->id]]) !!}
-        <div class="row">
-            <div class="col-md-10">
-                <div class="form-group">
-                    {!! Form::label('Remarks') !!}
-                    {!! Form::textarea('remarks',NULL,['class'=>'form-control','rows'=>'5']) !!}
-                    {!! Form::hidden('is_done',1) !!}
+        @if( $xrayResult->is_done == 0 )
+            {!! Form::model($xrayResult, ['method'=>'PATCH','action'=>['XrayController@update', $xrayResult->id]]) !!}
+            <div class="row">
+                <div class="col-md-10">
+                    <div class="form-group">
+                        {!! Form::label('Remarks') !!}
+                        {!! Form::textarea('remarks',NULL,['class'=>'form-control','rows'=>'5']) !!}
+                        {!! Form::hidden('is_done',1) !!}
+                    </div>
+                    <div class="form-group">
+                        {!! Form::label('Impression') !!}
+                        {!! Form::textarea('impression',NULL,['class'=>'form-control','rows'=>'5']) !!}
+                    </div>
+                    <div class="form-group">
+                        {!! Form::submit('Save',['class'=>'btn btn-primary']) !!}
+                    </div>
                 </div>
-                <div class="form-group">
-                    {!! Form::label('Impression') !!}
-                    {!! Form::textarea('impression',NULL,['class'=>'form-control','rows'=>'5']) !!}
+            </div>  
+            {!! Form::close() !!}
+        @else
+            <div class="row">
+                <div class="col-md-10">
+                    <h4>Remarks</h4>
+                    <p>{{ $xrayResult->remarks }}</p>
+                    <h4>Impression</h4>
+                    <p>{{ $xrayResult->impression }}</p>
                 </div>
-                <div class="form-group">
-                    {!! Form::submit('Save',['class'=>'btn btn-primary']) !!}
-                </div>
-
-
             </div>
-        </div>  
-        {!! Form::close() !!}
+            <div class="row">
+                <div class="col-md-10">
+                    <a href="{{ action('XrayController@radiologistPrint',$xrayResult->id) }}" target="_blank" class="btn btn-success">View Print</a>
+                </div>
+            </div>
+        @endif
+
+
+        
 	</div>
 </div>
 @endsection

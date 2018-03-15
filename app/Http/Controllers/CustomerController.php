@@ -422,6 +422,7 @@ class CustomerController extends Controller
         foreach ($labResult as $labs) {
             $saleName .= $labs->name.', ';
         }
+
         $saleData = [
             'name' => $saleName ,
             'quantity' => 1,

@@ -8,6 +8,9 @@ use App\Sale;
 use DB;
 use App\SaleDiscount;
 use Carbon\Carbon;
+use App\Service;
+use App\ServicePrice;
+use App\InventoryLabResultItem;
 
 class SaleController extends Controller
 {
@@ -112,6 +115,7 @@ class SaleController extends Controller
         session()->flash('success_message', 'Sale Updated Successfully.');
         return redirect()->back();
     }
+
 
     public function acceptPayment($trans='')
     {
@@ -243,8 +247,85 @@ class SaleController extends Controller
         $info = array_add($info, 'agencyName', $info->agency()->orderBy('created_at','desc')->first()->name);   
 
         // dd($sale);
+        // Services 
+        $serviceAll = Service::get();
+        $serviceList = [];
 
-        return view('sale.list', compact('customer','info','grandTotal','trans', 'sales','saleFirst','totalAmount','discount'));
+        if ( count($serviceAll) > 0) {
+
+            foreach ($serviceAll as $service) {
+                $servicePrice = NULL;    
+                foreach ($service->prices as $list) {
+                    $servicePrice = array_add($servicePrice, $list->id, $list->priceName);
+                }
+                $serviceList = array_add($serviceList, $service->name, $servicePrice);
+            }
+
+        }
+
+
+        return view('sale.list', compact('customer','info','grandTotal','trans', 'sales','saleFirst','totalAmount','discount','serviceList'));
+    }
+
+
+    public function addService($trans)
+    {
+        $all = Request::all();
+        $services = ServicePrice::findOrFail($all['service_id']);
+        $currentSale = Sale::where('transcode',$trans)->first();
+        $info = Customer::findOrFail($currentSale->customer_id);
+
+        $saleData = [
+            'name' => $services->service->name ,
+            'quantity' => 1,
+            'unit_price' => $services->price,
+            'discount' => 0,
+            'total_price' => $services->price,
+            'payment_id' => 1,
+            'agency_id' => $info->agency()->orderBy('pivot_created_at','desc')->first()->id,
+            'status' => 0,
+            'transcode' => $trans,
+            'customer_id' => $currentSale->customer_id,
+        ];
+        
+        $sale = Sale::create($saleData);
+
+        $serviceData = [
+            'customer_id' => $currentSale->customer_id,
+            'name' => $services->service->name,
+            'category_name' => $services->service->category->name,
+            'service_id' => $services->service->id,
+        ];
+
+        $labResultData = $sale->labResults()->create($serviceData);
+        
+        foreach ($services->service->item as $item) {
+            $itemData = [
+                'name' => $item->service, 
+                'group' => $item->group, 
+                'normal_values' => $item->nv, 
+                'co_values' => $item->cov,
+            ];
+
+            $labResultData->items()->create($itemData);
+
+        }         
+        if ($services->service->supplies()->count() > 0) {
+            foreach ($services->service->supplies as $supply) {
+                $supplyData = [
+                    'customer_id' => $currentSale->customer_id,
+                    'sale_id' => $sale->id,
+                    'lab_result_id' => $labResultData->id,
+                    'supply_id' => $supply->supply_id,
+                    'testqty' => $supply->qty,
+                ];
+                InventoryLabResultItem::create($supplyData);
+            }
+        }
+
+        session()->flash('success_message', 'Service added successfully.');
+        return redirect()->back();
+
     }
 
 }

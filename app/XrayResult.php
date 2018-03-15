@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class XrayResult extends Model
 {
     protected $fillable = [
-        'customer_id' , 'lab_result_id', 'file_no', 'date','clinical_data','remarks','impression','prepared_id','radiologist_id'
+        'customer_id' , 'lab_result_id', 'file_no', 'date','clinical_data','remarks','impression','prepared_id','radiologist_id','is_done'
     ];
 
 

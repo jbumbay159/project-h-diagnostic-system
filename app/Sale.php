@@ -42,4 +42,9 @@ class Sale extends Model
     {
         return $this->hasMany('App\InventoryLabResultItem');
     }
+
+    public function saleDiscount()
+    {
+        # code...
+    }
 }

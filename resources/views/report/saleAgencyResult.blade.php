@@ -1,6 +1,6 @@
 @php 
 	$grandTotal = 0;
-
+	use App\SaleDiscount;
 @endphp
 
 <!DOCTYPE html>
@@ -43,19 +43,38 @@
 						</tr>
 					</thead>
 					<tbody>
-						@foreach($agencyData->sales()->where('payment_id',1)->whereDate('created_at','>=',$date_from)->whereDate('created_at','<=',$date_to)->get() as $data)
+						@foreach($agencyData->sales()->where('payment_id',1)->whereDate('created_at','>=',$date_from)->whereDate('created_at','<=',$date_to)->get()->groupBy('transcode') as $transcode => $sales)
+							@php
+								$saleDiscount = SaleDiscount::where('transcode',$transcode)->first();
+								if( $saleDiscount != NULL ){
+									$totalDiscount = $saleDiscount->amount;
+								}else{
+									$totalDiscount = 0;
+								}	
+								$totalPrice = 0;
+							@endphp
+							@foreach($sales as $data)
+								@php
+									$date = $data->created_at;
+									$fullName = $data->customer->fullName;
+									$agency = $data->agency->name;
+									$payment_id = $data->payment_id;
+									$totalPrice += $data->total_price
+								@endphp
+							@endforeach
+
 						<tr>
-							<td>{{ $data->id }}</td>
-							<td>{{ \Carbon\Carbon::parse($data->created_at)->toFormattedDateString() }}</td>
-							<td>{{ $data->customer->last_name }}, {{ $data->customer->first_name }} {{ $data->customer->middle_name }} {{ $data->customer->name_extension }}</td>
-							<td>{{ ($data->payment_id == 1) ? 'CASH' : 'CREDIT' }}</td>
-							<td>{{ number_format($data->total_price,2) }}</td>
-							<?php $a +=$data->total_price; ?>
+							<td class="text-center">{{ $transcode }}</td>
+							<td class="text-center">{{ \Carbon\Carbon::parse($date)->toFormattedDateString() }}</td>
+							<td class="text-center">{{ $fullName }}</td>
+							<td class="text-center">{{ ($payment_id == 1) ? 'CASH' : 'BILLED' }}</td>
+							<td class="text-right"><b>{{ number_format($totalPrice - $totalDiscount,2) }}</b></td>
+							<?php $a +=($totalPrice - $totalDiscount ); ?>
 						</tr>
 						@endforeach
 						<tr>
 							<td class="gt" colspan="4" style="text-align:right;"> TOTAL</td>	
-							<td class="gt">{{ number_format($a,2) }}</td>	
+							<td class="gt text-right"><b>{{ number_format($a,2) }}</b></td>	
 						</tr>
 						@php 
 							$grandTotal += $a;
@@ -85,18 +104,31 @@
 					</thead>
 					<tbody>
 						@foreach($agencyData->sales()->where('payment_id',2)->whereDate('created_at','>=',$date_from)->whereDate('created_at','<=',$date_to)->get() as $data)
+							@php
+								$totalPrice = 0;
+							@endphp
+							@foreach($sales as $data)
+								@php
+									$date = $data->created_at;
+									$fullName = $data->customer->fullName;
+									$agency = $data->agency->name;
+									$payment_id = $data->payment_id;
+									$totalPrice += $data->total_price
+								@endphp
+							@endforeach
+
 						<tr>
-							<td>{{ $data->id }}</td>
-							<td>{{ \Carbon\Carbon::parse($data->created_at)->toFormattedDateString() }}</td>
-							<td>{{ $data->customer->last_name }}, {{ $data->customer->first_name }} {{ $data->customer->middle_name }} {{ $data->customer->name_extension }}</td>
-							<td>{{ ($data->payment_id == 1) ? 'CASH' : 'CREDIT' }}</td>
-							<td>{{ number_format($data->total_price,2) }}</td>
-							<?php $a +=$data->total_price; ?>
+							<td class="text-center">{{ $transcode }}</td>
+							<td class="text-center">{{ \Carbon\Carbon::parse($date)->toFormattedDateString() }}</td>
+							<td class="text-center">{{ $fullName }}</td>
+							<td class="text-center">{{ ($payment_id == 1) ? 'CASH' : 'BILLED' }}</td>
+							<td class="text-right"><b>{{ number_format($data->total_price,2) }}</b></td>
+							<?php $a +=$totalPrice; ?>
 						</tr>
 						@endforeach
 						<tr>
 							<td class="gt" colspan="4" style="text-align:right;"> TOTAL</td>	
-							<td class="gt">{{ number_format($a,2) }}</td>	
+							<td class="gt text-right">{{ number_format($a,2) }}</td>	
 						</tr>
 						@php 
 							$grandTotal += $a;

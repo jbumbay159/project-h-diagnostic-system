@@ -89,6 +89,7 @@ class XrayController extends Controller
     {
     	$all = Request::all();
     	$xrayResult = XrayResult::findOrFail($id);
+
     	$xrayResult->update($all);
     	session()->flash('success_message', 'X-ray result added successfully.');
     	return redirect()->back();
@@ -107,5 +108,11 @@ class XrayController extends Controller
     	}
 
     	return view('x-ray.radiologist',compact('xrayResults'));
+    }
+
+    public function radiologistPrint($id)
+    {
+    	$xrayResult = XrayResult::findOrFail($id);
+    	return view('x-ray.print',compact('xrayResult'));
     }
 }

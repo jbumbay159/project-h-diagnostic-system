@@ -65,7 +65,7 @@
     		<div class="col-md-4">
                 <div class="btn-toolbar pull-right" role="toolbar">
                     <a href="#perform-test" data-toggle="modal" class="btn btn-primary">Perform Test</a>
-                    <a href="#" class="btn btn-primary">View History</a>
+                    <a href="#history" data-toggle="modal" class="btn btn-primary">View History ></a>
                 </div>
     		</div>
     	</div>
@@ -90,6 +90,7 @@
     	</div>
     </div>
 </div>
+
 
 <div class="modal bounceIn animated" tabindex="-1" role="dialog" id="perform-test" aria-hidden="true">
     <div class="modal-dialog">
@@ -163,8 +164,8 @@
 <div style="display: none;">
     @foreach($labResults as $data)
     @if( $data->isxray == 0 )
-        <div class="print-service print-service-{{ $data->id }}" style="background-color: #ffffff; color: #000000;">
-            <a href="{{ action('LabResultController@edit',$data->id) }}">Edit</a>
+        <div class="print-service print-service-{{ $data->id }}" style="background-color: #ffffff; color: #000000;  text-align: center;">
+            <a href="{{ action('LabResultController@edit',$data->id) }}" class="btn btn-primary btn-lg" style="position: absolute;top: 50%;">Edit</a>
         </div>
     @endif
     @endforeach

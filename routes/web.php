@@ -97,6 +97,7 @@ Route::resource('agency-pricing','AgencyPricingController', ['except' => ['show'
 Route::patch('sale/payment/{trans}','SaleController@acceptPayment');
 Route::get('sale/payment/{trans}/print','SaleController@printPayment');
 Route::post('sale/discount/{trans}','SaleController@discount');
+Route::post('sale/add-services/{trans}','SaleController@addService');
 Route::resource('sale','SaleController', ['except' => ['destroy','create','edit']]);
 Route::patch('sale/{id}/void','SaleController@voidSales');
 Route::get('sale/{id}/transaction/{trans}','SaleController@list');
@@ -113,6 +114,7 @@ Route::get('lab-result/{$id}/print','LabResultController@printResult');
 
 Route::resource('xray-result','XrayController', ['except' => ['destroy','create']]);
 Route::get('xray-result-radiologist','XrayController@radiologist');
+Route::get('xray-result-radiologist/{id}/print','XrayController@radiologistPrint');
 
 // Vaccing Section
 Route::resource('vaccine','VaccineController', ['except' => ['destroy','create']]);
