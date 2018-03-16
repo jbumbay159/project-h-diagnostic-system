@@ -36,6 +36,11 @@ class LabResult extends Model
         return $this->service->is_xray;
     }
 
+    public function getUpdatedDateAttribute()
+    {
+        return Carbon::parse($this->updated_at)->toDateString();
+    }
+
     
 
 

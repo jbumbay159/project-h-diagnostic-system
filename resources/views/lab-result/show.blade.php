@@ -1,3 +1,7 @@
+@php
+    use Carbon\Carbon;
+@endphp
+
 @extends('template')
 @section('content')
 
@@ -65,7 +69,7 @@
     		<div class="col-md-4">
                 <div class="btn-toolbar pull-right" role="toolbar">
                     <a href="#perform-test" data-toggle="modal" class="btn btn-primary">Perform Test</a>
-                    <a href="#history" data-toggle="modal" class="btn btn-primary">View History ></a>
+                    <a href="#history" data-toggle="modal" class="btn btn-primary">View History</a>
                 </div>
     		</div>
     	</div>
@@ -134,6 +138,52 @@
     </div>
 </div>
 
+<div class="modal bounceIn animated" tabindex="-1" role="dialog" id="history" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myLargeModalLabel">View History</h4>
+            </div>
+            <div class="modal-body">    
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <th colspan="2" class="text-center">Test</th>
+                            </thead>
+                            <tbody>
+                            @foreach($resultHistory as $historyDate => $history)
+                                <tr data-toggle="collapse" data-target="#accordion-{{ $historyDate }}" class="clickable">
+                                    <td colspan="2">{{ Carbon::parse($historyDate)->toFormattedDateString() }}</td>
+                                </tr>
+                                @foreach($history as $list)
+                                    <tr id="accordion-{{ $historyDate }}" class="collapse">
+                                        <td>
+                                            <i class="fa fa-fw fa-level-up fa-rotate-90" aria-hidden="true"></i>{{ $list->name }}
+                                        </td>
+                                        <td class="text-center" width="80" style="text-transform: uppercase; padding: 5px;">
+                                            <button type="button" class="btn btn-primary btn-sm service-history-{{ $list->id }}"><span class="glyphicon glyphicon-list"></span></button>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>  
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">CLOSE</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="modal bounceIn animated" tabindex="-1" role="dialog" id="unpaid" aria-hidden="true">
     <div class="modal-dialog modal-sm">
@@ -162,10 +212,20 @@
 </div>
 
 <div style="display: none;">
+    @foreach($resultHistory as $historyDate => $history)
+        @foreach($history as $list)    
+            <div class="print-service print-service-history-{{ $list->id }}" style="background-color: #ffffff; color: #000000;  text-align: center;">
+                <a href="{{ action('LabResultController@edit',$list->id) }}{{ ($currentUser->roles()->where('name','administrator')->count() > 0 ) ? '?is_admin=1' : '' }}" class="btn btn-primary btn-lg" style="position: absolute;top: 50%;">Show Result</a>
+            </div>
+        @endforeach
+    @endforeach
+</div>
+
+<div style="display: none;">
     @foreach($labResults as $data)
     @if( $data->isxray == 0 )
         <div class="print-service print-service-{{ $data->id }}" style="background-color: #ffffff; color: #000000;  text-align: center;">
-            <a href="{{ action('LabResultController@edit',$data->id) }}" class="btn btn-primary btn-lg" style="position: absolute;top: 50%;">Edit</a>
+            <a href="{{ action('LabResultController@edit',$data->id) }}" class="btn btn-primary btn-lg" style="position: absolute;top: 50%;">Show Result</a>
         </div>
     @endif
     @endforeach
@@ -185,6 +245,32 @@
     })
 </script>
 
+<script type="text/javascript">
+@foreach($resultHistory as $historyDate => $history)
+        @foreach($history as $list)
+    $(function(){
+        $(".service-history-{{ $list->id }}").printPreview({
+            obj2print:'.print-service-history-{{ $list->id }}',
+            width:'810',
+            title:'{{ $list->name }}'
+            
+            /*optional properties with default values*/
+            //obj2print:'body',     /*if not provided full page will be printed*/
+            //style:'',             /*if you want to override or add more css assign here e.g: "<style>#masterContent:background:red;</style>"*/
+            //width: '670',         /*if width is not provided it will be 670 (default print paper width)*/
+            //height:screen.height, /*if not provided its height will be equal to screen height*/
+            //top:0,                /*if not provided its top position will be zero*/
+            //left:'center',        /*if not provided it will be at center, you can provide any number e.g. 300,120,200*/
+            //resizable : 'yes',    /*yes or no default is yes, * do not work in some browsers*/
+            //scrollbars:'yes',     /*yes or no default is yes, * do not work in some browsers*/
+            //status:'no',          /*yes or no default is yes, * do not work in some browsers*/
+            //title:'Print Preview' /*title of print preview popup window*/
+            
+        });
+    });
+    @endforeach
+@endforeach
+</script>
 
 
 <script type="text/javascript">

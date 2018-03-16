@@ -1,3 +1,6 @@
+@php
+	use Carbon\Carbon;
+@endphp
 @extends('template')
 
 @section('content')
@@ -12,7 +15,7 @@
 				 	<a href="{{ action('InventoryController@index') }}" class="btn btn-default btn-sm btn-quirk"> All</a>
 				 	<a href="{{ action('InventoryController@filter','critical-level') }}" class="btn btn-success btn-sm btn-quirk"> Critical Level</a>
 				 	<a href="{{ action('InventoryController@filter','expired') }}" class="btn btn-danger btn-sm btn-quirk"> Expired</a>
-				 	<a href="{{ action('InventoryController@filter','nearing-expiry') }}" class="btn btn-warning btn-sm btn-quirk"> Nearing Expiring</a>
+				 	<a href="{{ action('InventoryController@filter','nearing-expiry') }}" class="btn btn-warning btn-sm btn-quirk"> Nearing Expiry</a>
 				 </center>
 			</div>
 			<div class="col-md-3">
@@ -26,11 +29,9 @@
 		td{
 			text-align: center;
 		}
-		td:nth-child(1){
-			text-align: left;
-		}
 	</style>
 	<div class="panel-body">
+		@if($type == 'critical-level')
         <table id="dataTable1" class="table table-bordered table-hover">
         	<thead>
         		<tr style="text-transform: uppercase;">
@@ -49,6 +50,26 @@
         		@endforeach
         	</tbody>
         </table>
+        @elseif($type == 'expired' || $type == 'nearing-expiry')
+	        <table id="dataTable1" class="table table-bordered table-hover">
+	        	<thead>
+	        		<tr style="text-transform: uppercase;">
+	        			<th class="text-center">Date Expired</th>
+	        			<th class="text-center">Item Name</th>
+	        			<th class="text-center">Qty.</th>
+	        		</tr>
+	        	</thead>
+	        	<tbody>
+	        		@foreach( $itemArray as $item )
+		        		<tr>
+		        			<td class='text-center'>{{ Carbon::parse($item['dateExp'])->toFormattedDateString() }}</td>
+		        			<td>{{ $item['name'] }}</td>
+		        			<td>{{ $item['qty'] }}</td>
+		        		</tr>
+	        		@endforeach
+	        	</tbody>
+	        </table>
+        @endif
 	</div>
 </div>
 @endsection

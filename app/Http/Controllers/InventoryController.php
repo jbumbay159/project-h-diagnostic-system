@@ -261,45 +261,86 @@ class InventoryController extends Controller
     public function filter($type)
     {
         $supplies = [];
+        $itemArray = [];
+        $nowDate = Carbon::now()->toDateString();
         if ($type == 'critical-level') {
             $supplies = Supply::get()->where('currentQty','=<','minimumQtyNoTest');
         }elseif ($type == 'expired') {
-            $items = Supply::where('id',8)->get();
-            foreach ($items as $item) {
-                $currentQty = $item->currentQty;
-                $itemArray[] = 0;
+            $supplies = Supply::get();
+            foreach ($supplies as $supply) {
+                $currentQty = $supply->currentQty;
                 
-                // foreach ($item->inventoryReceive()->orderBy('created_at','DESC')->get() as $receive) {
-                //     $sumqty = 0;
-                //     foreach ($itemArray as $qty) {
-                //         $sumqty += $qty;
-                //     }
-                //     $totalQty = $currentQty - $sumqty;
-                //     if ($totalQty < $receive->quantity) {
-                //         $itemArray[] =  $totalQty - $receive->quantity;    
-                //     }else{
-                //         $itemArray[] = $receive->quantity;
-                //     }
+                foreach ($supply->inventoryReceive()->orderBy('created_at','DESC')->get() as $receive) {
+                    if ($receive->quantity >= $currentQty ) {
+                        $currentQty = $receive->quantity - $currentQty;
 
+                        $itemArray[] = [
+                            'qty'=> $receive->quantity - $currentQty.' '.$receive->supply->unit,
+                            'dateExp'=> $receive->date_expired,
+                            'name' => $receive->supply->name,
+                        ];
 
-                    
-                    
-                //     dump($totalQty);
-                    
-                    
-                // }
+                        if ($currentQty <= 0) {
+                            break;
+                        }
+                    }else{
+                        $currentQty -= $receive->quantity;
+                        $itemArray[] = [
+                            'qty'=> $receive->quantity.' '.$receive->supply->unit,
+                            'dateExp'=> $receive->date_expired,
+                            'name' => $receive->supply->name,
+                        ];
+                    }
+                }   
             }
+            // dd($itemArray);
+            foreach ($itemArray as $key => $item) {
+                if ($item['dateExp'] >= Carbon::now()->toDateString() ) {
+                    unset($itemArray[$key]);
+                }elseif( $item['dateExp'] == NULL) {
+                    unset($itemArray[$key]);
+                }
+            }
+        }elseif ($type == 'nearing-expiry'){
+            $supplies = Supply::get();
+            foreach ($supplies as $supply) {
+                $currentQty = $supply->currentQty;
+                
+                foreach ($supply->inventoryReceive()->orderBy('created_at','DESC')->get() as $receive) {
+                    if ($receive->quantity >= $currentQty ) {
+                        $currentQty = $receive->quantity - $currentQty;
 
-            // dd($currentQty);
+                        $itemArray[] = [
+                            'qty'=> $receive->quantity - $currentQty.' '.$receive->supply->unit,
+                            'dateExp'=> $receive->date_expired,
+                            'name' => $receive->supply->name,
+                        ];
 
-
-
-            $supplies = InventoryReceiveItem::get();
-
-            // dd($supplies);
+                        if ($currentQty <= 0) {
+                            break;
+                        }
+                    }else{
+                        $currentQty -= $receive->quantity;
+                        $itemArray[] = [
+                            'qty'=> $receive->quantity.' '.$receive->supply->unit,
+                            'dateExp'=> $receive->date_expired,
+                            'name' => $receive->supply->name,
+                        ];
+                    }
+                }   
+            }
+            // dd($itemArray);
+            $nearingExpiry = Carbon::now()->addMonths(3)->toDateString();
+            foreach ($itemArray as $key => $item) {
+                if ($item['dateExp'] < $nowDate || $item['dateExp'] > $nearingExpiry ) {
+                    unset($itemArray[$key]);
+                }elseif( $item['dateExp'] == NULL) {
+                    unset($itemArray[$key]);
+                }
+            }
         }
 
-        // return view('inventory.filter',compact('supplies','type'));
+        return view('inventory.filter',compact('supplies','type','itemArray'));
     }
     
 }

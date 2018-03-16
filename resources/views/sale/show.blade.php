@@ -61,9 +61,6 @@
             </div>
             <div class="col-md-4">
                 <span class="center-block text-center">
-                    <div class="alert alert-warning" style="color:#000;">
-                        <h2>Grand Total: {{ number_format($grandTotal, 2, ".", ",") }}</h2>
-                    </div>
                 </span>
             </div>
         </div>

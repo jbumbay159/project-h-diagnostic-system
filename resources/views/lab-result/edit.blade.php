@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="<?php echo asset('public/quirk/css/quirk.css') ?>">
     <style type="text/css">
         @media print {
-            button {
+            button, hr {
                 display: none !important;
             }
                 input,
@@ -34,9 +34,9 @@
 
 
     </style>
-    @if( $data->is_done == 1 )
+    @if( $data->is_done == 1 && $is_edit == false )
         <style type="text/css">
-                button {
+                button, hr {
                     display: none !important;
                 }
                     input,
@@ -54,6 +54,9 @@
 
 @if( $data->is_done != 1 )
         <button type="button" onclick="event.preventDefault();document.getElementById('labResult').submit();">Save</button>
+        <hr>
+@elseif( $is_edit == true )
+    <button type="button" onclick="event.preventDefault();document.getElementById('labResult').submit();">Save</button>
         <hr>
 @endif
 

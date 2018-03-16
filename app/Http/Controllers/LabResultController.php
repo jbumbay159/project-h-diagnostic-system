@@ -6,6 +6,7 @@ use Request;
 use DB;
 use App\Customer;
 use App\LabResult;
+use Auth;
 
 
 class LabResultController extends Controller
@@ -53,8 +54,10 @@ class LabResultController extends Controller
         $info = Customer::with(['agency','labResults'])->findOrFail($id);
         // $trans = $info->transmittal()->orderBy('encode_date','DESC')->first();
         $labResults = $info->labResults()->with(['sale','service'])->where('is_done',0)->get();
+        $resultHistory = $info->labResults()->with(['sale','service'])->where('is_done',1)->get()->where('is_xray',0)->groupBy('updatedDate');
         $customer = Customer::get()->pluck('fullName', 'id');
-        return view('lab-result.show', compact('info','customer','labResults'));
+        $currentUser = Auth::user();
+        return view('lab-result.show', compact('info','customer','labResults','resultHistory','currentUser'));
     }
 
     /**
@@ -69,7 +72,14 @@ class LabResultController extends Controller
         $data = $labResult;
         $info = Customer::findOrFail($labResult->customer_id);
         $trans = $info->transmittal()->orderBy('encode_date','DESC')->first();
-        return view('lab-result.edit', compact('info','labResult','trans','data'));
+        if (Request::get('is_admin') != NULL) {
+            $is_edit = true;
+        }else{
+            $is_edit = false;
+        }
+
+
+        return view('lab-result.edit', compact('info','labResult','trans','data','is_edit'));
     }
 
     /**
@@ -97,7 +107,7 @@ class LabResultController extends Controller
         }
 
         session()->flash('success_message', 'Result Added Successfully..');
-        return redirect()->action('LabResultController@edit',$id);
+        return redirect()->back();
 
     }
 
