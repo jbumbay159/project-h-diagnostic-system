@@ -20,7 +20,13 @@ class InventoryController extends Controller
 
     public function index()
     {
-    	return view('inventory.index');
+        if (Request::get('print') != NULL) {
+            $supplies = Supply::get();
+            return view('inventory.printAll', compact('supplies'));
+        }else{
+            return view('inventory.index');    
+        }
+    	
     }
 
     public function store()
@@ -155,7 +161,7 @@ class InventoryController extends Controller
     public function addReceiveItem()
     {
     	Request::validate([
-            'supply' => 'exists:supplies,id',
+            'student' => 'exists:supplies,id',
             'qty' => 'required',
         ]);  
 
@@ -233,7 +239,7 @@ class InventoryController extends Controller
 
         return DataTables::of($data)
         ->addColumn('qty',function ($item) {
-            return $item->currentQty.' '.$item->unit.' / '.$item->currentTest.' Test';
+            return floor($item->currentQty).' '.$item->unit.' / '.$item->currentTest.' Test';
         })
         ->addColumn('minimumQty',function ($item) {
             return $item->minimumQty;
@@ -275,9 +281,10 @@ class InventoryController extends Controller
                         $currentQty = $receive->quantity - $currentQty;
 
                         $itemArray[] = [
-                            'qty'=> $receive->quantity - $currentQty.' '.$receive->supply->unit,
+                            'qty'=> $receive->quantity - $currentQty,
                             'dateExp'=> $receive->date_expired,
                             'name' => $receive->supply->name,
+                            'unit' => $receive->supply->unit,
                         ];
 
                         if ($currentQty <= 0) {
@@ -286,9 +293,10 @@ class InventoryController extends Controller
                     }else{
                         $currentQty -= $receive->quantity;
                         $itemArray[] = [
-                            'qty'=> $receive->quantity.' '.$receive->supply->unit,
+                            'qty'=> $receive->quantity,
                             'dateExp'=> $receive->date_expired,
                             'name' => $receive->supply->name,
+                            'unit' => $receive->supply->unit,
                         ];
                     }
                 }   
@@ -311,9 +319,10 @@ class InventoryController extends Controller
                         $currentQty = $receive->quantity - $currentQty;
 
                         $itemArray[] = [
-                            'qty'=> $receive->quantity - $currentQty.' '.$receive->supply->unit,
+                            'qty'=> $receive->quantity - $currentQty,
                             'dateExp'=> $receive->date_expired,
                             'name' => $receive->supply->name,
+                            'unit' => $receive->supply->unit,
                         ];
 
                         if ($currentQty <= 0) {
@@ -322,9 +331,10 @@ class InventoryController extends Controller
                     }else{
                         $currentQty -= $receive->quantity;
                         $itemArray[] = [
-                            'qty'=> $receive->quantity.' '.$receive->supply->unit,
+                            'qty'=> $receive->quantity,
                             'dateExp'=> $receive->date_expired,
                             'name' => $receive->supply->name,
+                            'unit' => $receive->supply->unit,
                         ];
                     }
                 }   

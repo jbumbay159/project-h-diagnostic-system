@@ -26,6 +26,11 @@ class LabResult extends Model
         return $this->hasOne('App\Service', 'id', 'service_id');
     }
 
+    public function supplies()
+    {
+        return $this->hasMany('App\InventoryLabResultItem');
+    }
+
     public function getCreatedDateAttribute()
     {
         return  Carbon::parse($this->created_at)->toFormattedDateString();

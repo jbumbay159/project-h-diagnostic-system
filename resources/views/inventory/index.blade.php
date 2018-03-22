@@ -46,7 +46,9 @@
         	</thead>
         </table>
 	</div>
+
 </div>
+<a target="_blank" href="?print=all" class="btn btn-primary">Print</a>
 @endsection
 
 @section('js')

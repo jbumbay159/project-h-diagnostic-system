@@ -45,7 +45,7 @@
 	        		<tr>
 	        			<td>{{ $supply->name }}</td>
 	        			<td>{{ $supply->currentQty.' '.$supply->unit }}</td>
-	        			<td>{{ $supply->minimumQtyNoTest.' '.$supply->unit }}</td>
+	        			<td>{{ number_format($supply->minimumQtyNoTest,0).' '.$supply->unit }}</td>
 	        		</tr>
         		@endforeach
         	</tbody>
@@ -64,7 +64,7 @@
 		        		<tr>
 		        			<td class='text-center'>{{ Carbon::parse($item['dateExp'])->toFormattedDateString() }}</td>
 		        			<td>{{ $item['name'] }}</td>
-		        			<td>{{ $item['qty'] }}</td>
+		        			<td>{{ floor($item['qty']) }} {{ $item['unit'] }}</td>
 		        		</tr>
 	        		@endforeach
 	        	</tbody>

@@ -52,13 +52,7 @@
 
 
 
-@if( $data->is_done != 1 )
-        <button type="button" onclick="event.preventDefault();document.getElementById('labResult').submit();">Save</button>
-        <hr>
-@elseif( $is_edit == true )
-    <button type="button" onclick="event.preventDefault();document.getElementById('labResult').submit();">Save</button>
-        <hr>
-@endif
+
 
 {!! Form::model($labResult, ['method'=>'patch','id'=>'labResult', 'action' => ['LabResultController@update', $labResult->id]]) !!}
         <div class="container-fluid">
@@ -157,7 +151,7 @@
                                             <td style="padding: 0px;">{{ $serviceItem->name }}:</td>
 
                                             <td style="padding: 0px;" class="text">
-                                                <center>{!! Form::text('result[]',NULL,['class'=>'inputs','style'=>'text-align:center;']) !!}</center>
+                                                <center>{!! Form::text('result[]',$serviceItem->result,['class'=>'inputs','style'=>'text-align:center;']) !!}</center>
                                                 {!! Form::hidden('id[]',$serviceItem->id) !!}
                                                 {!! Form::hidden('remarks_val[]',$serviceItem->id) !!}
                                             </td>
@@ -174,7 +168,7 @@
             <p><span style="margin-top:20px;display: block;"><b>REMARKS:</b></span>{!! Form::textarea('labRemarks',$data->remarks,['cols'=>100,'rows'=>2,'class'=>'inputs']) !!}</p>
             <hr style="border: 1px solid;">
             @if( $data->is_done != 1 )
-            <p class="notSave text-center">====================== Not Save ======================</p>
+                <p class="notSave text-center">====================== Not Save ======================</p>
             @endif
             <div class="row">
                 <div class="col-md-6 col-sm-6 col-xs-6">
@@ -190,9 +184,38 @@
                     </center>
                 </div>
             </div>
-            
         </div>
+        
+
+        @if( $data->is_done != 1 || $is_edit == true)
+            <div class="notSave">
+                
+            
+            <hr>
+            <table style="width: 100%;background-color: #ffffff;">
+                <thead>
+                    <th>Item Used</th>
+                    <th>No. Test</th>
+                </thead>
+                <tbody>
+                    @foreach($labResult->supplies as $supply)
+                    <tr>
+                        <td>{{ $supply->supply->name }}</td>
+                        <td>
+                            {!! Form::text('qty[]',$supply->testqty) !!}
+                            {!! Form::hidden('supply_id[]',$supply->id) !!}
+                        </td>
+                    </tr>
+                    @endforeach    
+                </tbody>
+                
+            </table>
+            <hr>
+            <button type="button" onclick="PrintMeSubmitMe()">Save</button>
+            </div>
+        @endif
         {{ Form::close() }}
+
             <script src="<?php echo asset('public/quirk/lib/jquery/jquery.js') ?>"></script>
             <script type="text/javascript">
                 $('.inputs').keydown(function (e) {
@@ -202,7 +225,25 @@
                      }
                  });
             </script>
+            <script type="text/javascript">
+                
+
+            function PrintMeSubmitMe()
+            {
+                $(".notSave").hide();
+                window.print();
+                SubmitMe();
+            }
+
+            function SubmitMe()
+            {
+                document.getElementById('labResult').submit();
+            }
+
+            </script>
+
         </div>
+
         <div style="page-break-after: always;"></div>
 </body>
 </html>

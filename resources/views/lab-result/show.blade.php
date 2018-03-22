@@ -75,7 +75,7 @@
     	</div>
     	<hr>
     	<div class="row spacing">
-    		<div class="col-md-12">
+    		<div class="col-md-8">
     			<table class="table table-bordered table-sm table-striped-col" style="text-transform: uppercase;">
     				<thead>
     					<tr>
@@ -91,6 +91,22 @@
     				</tbody>
     			</table>
     		</div>
+            <div class="col-md-4">
+                <table class="table table-bordered table-sm table-striped-col" style="text-transform: uppercase;">
+                    <thead>
+                        <tr>
+                            <th>Fingerprint</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($info->fingerPrint as $fingerprint )
+                            <tr>
+                                <td>{{ $fingerprint->finger }}</td>
+                            </tr>
+                        @endforeach                     
+                    </tbody>
+                </table>
+            </div>
     	</div>
     </div>
 </div>
@@ -154,11 +170,11 @@
                             </thead>
                             <tbody>
                             @foreach($resultHistory as $historyDate => $history)
-                                <tr data-toggle="collapse" data-target="#accordion-{{ $historyDate }}" class="clickable">
+                                <tr data-toggle="collapse" data-target=".accordion-{{ $historyDate }}" class="clickable">
                                     <td colspan="2">{{ Carbon::parse($historyDate)->toFormattedDateString() }}</td>
                                 </tr>
                                 @foreach($history as $list)
-                                    <tr id="accordion-{{ $historyDate }}" class="collapse">
+                                    <tr class="collapse accordion-{{ $historyDate }}">
                                         <td>
                                             <i class="fa fa-fw fa-level-up fa-rotate-90" aria-hidden="true"></i>{{ $list->name }}
                                         </td>

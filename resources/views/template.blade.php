@@ -11,18 +11,10 @@
 
         <title>Hyatt Diagnostic System Inc</title>
 
-        <link rel="stylesheet" href="<?php echo asset('public/quirk/lib/jquery-ui/jquery-ui.css') ?>">
-        <link rel="stylesheet" href="<?php echo asset('public/quirk/lib/select2/select2.css') ?>">
-        <link rel="stylesheet" href="<?php echo asset('public/quirk/lib/dropzone/dropzone.css') ?>">
-        <link rel="stylesheet" href="<?php echo asset('public/quirk/lib/jquery-toggles/toggles-full.css') ?>">
-        <link rel="stylesheet" href="<?php echo asset('public/quirk/lib/fontawesome/css/font-awesome.css') ?>">
-        <link rel="stylesheet" href="<?php echo asset('public/quirk/lib/timepicker/jquery.timepicker.css') ?>">
-        <link rel="stylesheet" href="<?php echo asset('public/quirk/lib/bootstrapcolorpicker/css/bootstrap-colorpicker.css') ?>">
-        <link rel="stylesheet" href="<?php echo asset('public/quirk/lib/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css') ?>">
-        <link rel="stylesheet" href="<?php echo asset('public/quirk/lib/select2/select2.css') ?>">
-        <link rel="stylesheet" href="<?php echo asset('public/quirk/lib/animate.css/animate.css') ?>">
 
-        <link rel="stylesheet" href="<?php echo asset('public/quirk/css/quirk.css') ?>">
+        <link rel="stylesheet" href="{{ asset('public/css/app.css') }}">
+        <link rel="stylesheet" href="{{ asset('public/css/all.css') }}">
+        <link rel="stylesheet" href="{{ asset('public/quirk/css/quirk.css') }}">
 
         <script src="<?php echo asset('quirk/lib/modernizr/modernizr.js') ?>"></script>
         <style type="text/css">
@@ -62,14 +54,28 @@
             .round.blue {background-color: #3EA6CE;}
             .round.orange {background-color: #FF6701;}
            
+            #loader{
+                    display: block;
+                    z-index: 9999;
+                    color: #fff;
+                    
+                    margin-top: 16px;
+                    margin-left: 289px;
+                    position: fixed;
+            }
         </style>
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
         <script src="../lib/html5shiv/html5shiv.js"></script>
         <script src="../lib/respond/respond.src.js"></script>
         <![endif]-->
+        
+        
     </head>
     <body>
+        <div id="loader">
+            <h4 style="color: #fff;">Please Wait...</h4>
+        </div>
         <header>
             <div class="headerpanel">
                 <div class="logopanel">
@@ -115,26 +121,26 @@
                         <div class="tab-pane active" id="mainmenu">
                             <h5 class="sidebar-title">Favorites</h5>
                             <ul class="nav nav-pills nav-stacked nav-quirk">
-                                <li><a href="#" ><i class="fa fa-home"></i> <span>Dashboard</span></a></li>
+                                <li><a href="#" rel='tab' ><i class="fa fa-home"></i> <span>Dashboard</span></a></li>
                             </ul>
                             <h5 class="sidebar-title">Main Menu</h5>
                             <ul class="nav nav-pills nav-stacked nav-quirk">
                                 <li class="nav-parent {{ Request::is('customer/*') || Request::is('customer') ? 'active' : '' }}">
                                     <a href=""><i class="fa fa-check-square"></i> <span>Registration</span></a>
                                     <ul class="children">
-                                        <li class="{{ Request::is('customer/*') || Request::is('customer') ? 'active' : '' }}"><a href="{{ url('customer') }}">Customer</a></li>
+                                        <li class="{{ Request::is('customer/*') || Request::is('customer') ? 'active' : '' }}"><a rel='tab' href="{{ url('customer') }}">Customer</a></li>
                                     </ul>
                                 </li>
                                 <li class="nav-parent {{ Request::is('lab-result/*') || Request::is('lab-result') ? 'active' : '' }}">
                                     <a href=""><i class="fa fa-pencil-square-o"></i> <span>LABORATORY RESULT</span></a>
                                     <ul class="children">
-                                        <li class="{{ Request::is('lab-result/*') || Request::is('lab-result') ? 'active' : '' }}"><a href="{{ url('lab-result') }}">Search</a></li>
+                                        <li class="{{ Request::is('lab-result/*') || Request::is('lab-result') ? 'active' : '' }}"><a rel='tab' href="{{ url('lab-result') }}">Search</a></li>
                                     </ul>
                                 </li>
                                 <li class="nav-parent {{ Request::is('vaccine/*') || Request::is('vaccine') ? 'active' : '' }}">
                                     <a href=""><i class="fa fa-pencil-square-o"></i> <span>VACCINE</span></a>
                                     <ul class="children">
-                                        <li class="{{ Request::is('vaccine/*') || Request::is('vaccine') ? 'active' : '' }}"><a href="{{ url('vaccine') }}">Search</a></li>
+                                        <li class="{{ Request::is('vaccine/*') || Request::is('vaccine') ? 'active' : '' }}"><a rel='tab' href="{{ url('vaccine') }}">Search</a></li>
                                     </ul>
                                 </li>
                                 <li class="nav-parent {{ Request::is('xray-result/*') || Request::is('xray-result') || Request::is('xray-result-radiologist/*') || Request::is('xray-result-radiologist') ? 'active' : '' }}">
@@ -206,16 +212,22 @@
                     </div>
                 </div>
             </div>
+            <div id="content">
             <div class="mainpanel">
                 <div class="contentpanel">
+                    
+                    
                     @include('alert')
                     @yield('content')
+                    </div>
                 </div>
             </div>
             @yield('modal')
             @yield('footer')
         </section>
+
         <script src="<?php echo asset('public/quirk/lib/jquery/jquery.js') ?>"></script>
+
         <script src="<?php echo asset('public/quirk/lib/jquery-ui/jquery-ui.js') ?>"></script>
         <script src="<?php echo asset('public/quirk/lib/bootstrap/js/bootstrap.js') ?>"></script>
         <script src="<?php echo asset('public/quirk/lib/jquery-autosize/autosize.js') ?>"></script>
@@ -245,8 +257,13 @@
             $('.dt').datepicker({ 
                 dateFormat: 'yy-mm-dd' 
             });
+
+            $(window).load(function() {      //Do the code in the {}s when the window has loaded 
+                $("#loader").fadeOut("fast");  //Fade out the #loader div
+            });
         </script>
         @yield('js')
         @stack('scripts')
+
     </body>
 </html>

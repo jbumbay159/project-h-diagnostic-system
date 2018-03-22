@@ -187,7 +187,7 @@ class CustomerController extends Controller
         $info = Customer::findOrFail($id);
         $package = Package::all()->pluck('namePrice','id');
         $serviceAll = Service::all();
-        $sale = $info->sales()->orderBy('created_at', 'desc')->get();
+        $sale = $info->sales()->orderBy('created_at', 'desc')->where('status',0)->sum('total_price');
 
 
         $serviceList = [];
@@ -206,14 +206,8 @@ class CustomerController extends Controller
         
 
         $grandTotal = 0;    
-        foreach ( $sale as $item ){
-            $grandTotal += $item->total_price;
-        }
-        $totalPay = 0;
-        foreach ($info->payments as $payList) {
-            $totalPay += $payList->amount;
-        }
-        $grandTotal = $grandTotal - $totalPay;
+       
+        $grandTotal = $sale;
         
         $count = 0;
         foreach ($info->labResults as $labData) {

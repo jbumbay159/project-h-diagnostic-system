@@ -6,6 +6,7 @@ use Request;
 use DB;
 use App\Customer;
 use App\LabResult;
+use App\InventoryLabResultItem;
 use Auth;
 
 
@@ -39,6 +40,9 @@ class LabResultController extends Controller
     public function store()
     {
         $all = Request::all();
+        Request::validate([
+            'customer' => 'required|exists:customers,id|numeric',
+        ]);
         $customer = Customer::findOrFail($all['customer']);
         return redirect()->action('LabResultController@show', $customer->id);
     }
@@ -92,9 +96,11 @@ class LabResultController extends Controller
     public function update($id)
     {
         $all = Request::all();
-        $service = LabResult::findOrFail($id);
+
+        // dd($all);
+        $labResult = LabResult::findOrFail($id);
         $all = array_add($all,'is_done',1);
-        $result = $service->update($all);
+        $result = $labResult->update($all);
 
         if ( Request::get('id') != NULL || count(Request::get('id')) > 0 ) {
             foreach ($all['id'] as $key => $value) {
@@ -102,13 +108,18 @@ class LabResultController extends Controller
                     'result' => $all['result'][$key],
                     'remarks' => $all['remarks_val'][$key],
                 ];
-                $list = $service->items()->findOrFail($value)->update($data);
+                $list = $labResult->items()->findOrFail($value)->update($data);
             }
         }
 
+        if (Request::get('supply_id') != NULL || count(Request::get('supply_id')) > 0) {
+            foreach ($all['supply_id'] as $key => $supplyId) {
+                $resultItem = InventoryLabResultItem::findOrFail($supplyId)->update(['testqty'=>$all['qty'][$key]]);
+            }
+            
+        }
         session()->flash('success_message', 'Result Added Successfully..');
         return redirect()->back();
-
     }
 
    
