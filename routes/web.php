@@ -132,3 +132,5 @@ Route::get('report/daily-sales', 'ReportController@dailySalesReport');
 Route::get('report/agency-sales', 'ReportController@agencySalesReport');
 Route::get('report/summary-sales', 'ReportController@summarySalesReport');
 Route::get('report/transaction-summary', 'ReportController@transactionSummaryReport');
+Route::get('report/status', 'ReportController@statusReport');
+Route::get('report/consumed-prod', 'ReportController@consumedProd');

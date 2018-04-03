@@ -23,9 +23,9 @@
 				<div class="col-md-offset-2 col-md-8">
 					<table class="table-bordered" style="width: 100%;">
 						<thead>
-							<th>Name</th>
-							<th class="text-center">Minimum Level</th>
-							<th class="text-center">Qty.</th>
+							<th>NAME</th>
+							<th class="text-center">MINIMUM BALANCE</th>
+							<th class="text-center">BALANCE ON HAND</th>
 						</thead>
 						<tbody>
 							@foreach( $supplies as $supply )
@@ -33,7 +33,6 @@
 								<td>{{ $supply->name }}</td>
 								<td class="text-center">
 									{{ floor($supply->currentQty).' '.$supply->unit.' / '.$supply->currentTest.' Test' }}
-
 								</td>
 								<td class="text-center">{{ $supply->minimumQty }}</td>
 							</tr>
@@ -44,5 +43,4 @@
 			</div>
 		</div>
 	</body>
-
 </html>

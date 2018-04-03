@@ -71,7 +71,6 @@ class CustomerController extends Controller
             'gender'        => 'required',
             'birthdate'     => 'required|date',
             'address'       => 'required',
-            'contact_number'=> 'required',
             'package_id'    => 'required|exists:packages,id|numeric',
             'country'    => 'required|exists:countries,id|numeric',
             'agency'     => 'required|exists:agencies,id|numeric',
@@ -129,6 +128,7 @@ class CustomerController extends Controller
                     'group' => $item->group, 
                     'normal_values' => $item->nv, 
                     'co_values' => $item->cov,
+                    'remarks' => $item->remarks,
                 ];
 
                 $labResult->items()->create($itemData);
@@ -371,6 +371,7 @@ class CustomerController extends Controller
                     'group' => $item->group, 
                     'normal_values' => $item->normal_values, 
                     'co_values' => $item->co_values,
+                    'remarks' => $item->remarks,
                 ];
 
                 $labResultData->items()->create($itemData);
@@ -448,6 +449,7 @@ class CustomerController extends Controller
                     'group' => $item->group, 
                     'normal_values' => $item->nv, 
                     'co_values' => $item->cov,
+                    'remarks' => $item->remarks,
                 ];
 
                 $labResultData->items()->create($itemData);
@@ -536,6 +538,7 @@ class CustomerController extends Controller
                     'group' => $item->group, 
                     'normal_values' => $item->nv, 
                     'co_values' => $item->cov,
+                    'remarks' => $item->remarks,
                 ];
                 $labResult->items()->create($itemData);
             }
@@ -601,6 +604,7 @@ class CustomerController extends Controller
                     'group' => $item->group, 
                     'normal_values' => $item->nv, 
                     'co_values' => $item->cov,
+                    'remarks' => $item->remarks,
                 ];
 
                 $labResult->items()->create($itemData);

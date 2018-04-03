@@ -25,6 +25,11 @@ class XrayController extends Controller
         $labResults = NULL;
         $currentUser = Auth::user();
         $dateNow = Carbon::now()->toDateString();
+        $radio_latest = XrayResult::latest()->first();
+        if ($radio_latest != NULL) {
+            $radio_latest = $radio_latest->radiologist_id;
+        }
+        
 
         $users = Role::where('name','radiologist')->first()->users()->get()->pluck('fullName','id');
         if ( Request::get('customer') != NULL ) {
@@ -33,7 +38,7 @@ class XrayController extends Controller
         	$labResults = $info->labResults()->with(['sale','service'])->where('is_done',0)->get()->where('isxray',1)->pluck('name','id');
         }
 
-        return view('x-ray.index', compact('customer','info','labResults','currentUser','users','dateNow'));
+        return view('x-ray.index', compact('customer','info','labResults','currentUser','users','dateNow','radio_latest'));
     }
 
 

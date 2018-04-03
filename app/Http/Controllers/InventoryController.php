@@ -350,7 +350,12 @@ class InventoryController extends Controller
             }
         }
 
-        return view('inventory.filter',compact('supplies','type','itemArray'));
+        if (Request::get('print') != NULL) {
+            return view('inventory.printFilter',compact('supplies','type','itemArray'));  
+        }else{
+            return view('inventory.filter',compact('supplies','type','itemArray'));    
+        }
+        
     }
     
 }

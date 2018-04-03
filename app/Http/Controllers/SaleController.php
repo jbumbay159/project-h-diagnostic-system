@@ -305,6 +305,7 @@ class SaleController extends Controller
                 'group' => $item->group, 
                 'normal_values' => $item->nv, 
                 'co_values' => $item->cov,
+                'remarks' => $item->remarks,
             ];
 
             $labResultData->items()->create($itemData);

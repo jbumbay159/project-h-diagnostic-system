@@ -119,7 +119,7 @@
                             </div>
                             <div class="form-group">
                                 {!! Form::label('Radiologist') !!}
-                                {!! Form::select('radiologist_id',$users,null,['class'=>'form-control select', 'placeholder'=>'PLEASE SELECT'])!!}
+                                {!! Form::select('radiologist_id',$users,$radio_latest ,['class'=>'form-control select', 'placeholder'=>'PLEASE SELECT'])!!}
                             </div>
                             <div class="form-group">
                                 <p>Prepared By. <b>{{ $currentUser->fullName }}</b></p>

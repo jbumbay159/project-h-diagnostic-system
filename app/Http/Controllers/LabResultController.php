@@ -99,26 +99,30 @@ class LabResultController extends Controller
 
         // dd($all);
         $labResult = LabResult::findOrFail($id);
+        $whereDone = $labResult->is_done;
         $all = array_add($all,'is_done',1);
         $result = $labResult->update($all);
 
         if ( Request::get('id') != NULL || count(Request::get('id')) > 0 ) {
+
             foreach ($all['id'] as $key => $value) {
                 $data = [
                     'result' => $all['result'][$key],
                     'remarks' => $all['remarks_val'][$key],
                 ];
-                $list = $labResult->items()->findOrFail($value)->update($data);
+                if ($whereDone == 1) {
+                    $item = $labResult->items()->findOrFail($value);
+                    if($item->changeResult != $data['result'] || $item->changeRemarks != $data['remarks'] ){
+                        $item->changes()->create($data);
+                    }
+                }else{
+                    $list = $labResult->items()->findOrFail($value)->update($data);    
+                }
+                
             }
         }
 
-        if (Request::get('supply_id') != NULL || count(Request::get('supply_id')) > 0) {
-            foreach ($all['supply_id'] as $key => $supplyId) {
-                $resultItem = InventoryLabResultItem::findOrFail($supplyId)->update(['testqty'=>$all['qty'][$key]]);
-            }
-            
-        }
-        session()->flash('success_message', 'Result Added Successfully..');
+        session()->flash('done', 'Result Added Successfully..');
         return redirect()->back();
     }
 

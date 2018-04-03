@@ -12,7 +12,7 @@ class Country extends Model
     
     public function customer()
     {
-    	return $this->belongsToMany('App\Customer');
+    	return $this->belongsToMany('App\Customer')->withPivot('id', 'created_at');
     }
     
     public function association()

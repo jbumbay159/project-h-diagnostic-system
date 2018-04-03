@@ -28,14 +28,15 @@
                 box-shadow: none !important;
                 outline: none !important;
             }
+
+            .sticky-nav{
+                display: none !important;
+            }
         }
-
-
-
 
     </style>
     @if( $data->is_done == 1 && $is_edit == false )
-        <style type="text/css">
+        <!-- <style type="text/css">
                 button, hr {
                     display: none !important;
                 }
@@ -45,20 +46,29 @@
                     box-shadow: none !important;
                     outline: none !important;
                 }
-        </style>
+
+        </style> -->
     @endif
 </head>
 <body style="background-color: #fff;color: #000000;">
 
+<div class="sticky-nav" style=" display: block;background-color: #ffffff;width: 51px;position: fixed;left: 0px;z-index: 100;overflow-y: auto;overflow-x: hidden;border-right: 1px solid;height: 100%;padding: 2px;">
+    <button type="button" class="btn btn-primary  btn-lg" onclick="PrintMeSubmitMe()"><i class="glyphicon glyphicon-floppy-disk"></i></button>
+    @if( $data->is_done == 1 )
+    <button type="button" class="btn btn-primary btn-lg" style="margin-top: 5px;" onclick="PrintMe()"><i class="glyphicon glyphicon-print"></i></button>
+    @endif
+    <button type="button" class="btn btn-danger btn-lg" style="margin-top: 5px;" onclick="window.top.close()"><i class="glyphicon glyphicon-log-out"></i></button>
 
 
 
 
-{!! Form::model($labResult, ['method'=>'patch','id'=>'labResult', 'action' => ['LabResultController@update', $labResult->id]]) !!}
+
+</div>
+
+
+
+{!! Form::model($labResult, ['method'=>'patch','id'=>'labResult','style'=>'float: right;', 'action' => ['LabResultController@update', $labResult->id]]) !!}
         <div class="container-fluid">
-            <div class="row">
-                
-            </div>
             <div class="row">
                 <div class="col-md-12">
                     <p class="text-center">
@@ -103,7 +113,7 @@
                             @foreach($data->items()->get()->groupBy('group') as $groupName => $serviceItems) 
                                 <table style="width: 100%;background-color: #ffffff;">
                                     <thead>
-                                        <th><u>{{ $groupName }}:</u></th>
+                                        <th><u>{{ $groupName }}</u></th>
                                         <th><u><center>RESULT</center></u></th>
 
                                         @if($data->covnv('co_values') == true)
@@ -117,8 +127,8 @@
                                     <tbody>
                                         @foreach( $serviceItems as $serviceItem )
                                         <tr>
-                                            <td>{{ $serviceItem->name }}</td>
-                                            <td class="text"><center>{!! Form::text('result[]',$serviceItem->result,['class'=>'inputs','style'=>'text-align:center;']) !!}</center></td>
+                                            <td>{{ $serviceItem->countChanges }}{{ $serviceItem->name }}</td>
+                                            <td class="text"><center>{!! Form::text('result[]',$serviceItem->changeResult,['class'=>'inputs','style'=>'text-align:center;']) !!}</center></td>
                                             {!! Form::hidden('id[]',$serviceItem->id) !!}
                                             @if($data->covnv('co_values') == true)
                                                 <td><center>{{ $serviceItem->co_values }}</center></td>
@@ -126,7 +136,7 @@
                                             @if($data->covnv('normal_values') == true)
                                                 <td><center>{{ $serviceItem->normal_values }}</center></td>
                                             @endif
-                                            <td><center>{!! Form::text('remarks_val[]',$serviceItem->remarks,['style'=>'text-align:center;']) !!}</center></td>
+                                            <td><center>{!! Form::text('remarks_val[]',$serviceItem->changeRemarks,['style'=>'text-align:center;']) !!}</center></td>
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -148,12 +158,12 @@
                                     <tbody>
                                         @foreach( $serviceItems as $serviceItem )
                                         <tr>
-                                            <td style="padding: 0px;">{{ $serviceItem->name }}:</td>
+                                            <td style="padding: 0px;">{{ $serviceItem->countChanges }}{{ $serviceItem->name }}:</td>
 
                                             <td style="padding: 0px;" class="text">
-                                                <center>{!! Form::text('result[]',$serviceItem->result,['class'=>'inputs','style'=>'text-align:center;']) !!}</center>
+                                                <center>{!! Form::text('result[]',$serviceItem->changeResult,['class'=>'inputs','style'=>'text-align:center;']) !!}</center>
                                                 {!! Form::hidden('id[]',$serviceItem->id) !!}
-                                                {!! Form::hidden('remarks_val[]',$serviceItem->id) !!}
+                                                {!! Form::hidden('remarks_val[]',null) !!}
                                             </td>
                                         </tr>
                                         @endforeach
@@ -186,34 +196,6 @@
             </div>
         </div>
         
-
-        @if( $data->is_done != 1 || $is_edit == true)
-            <div class="notSave">
-                
-            
-            <hr>
-            <table style="width: 100%;background-color: #ffffff;">
-                <thead>
-                    <th>Item Used</th>
-                    <th>No. Test</th>
-                </thead>
-                <tbody>
-                    @foreach($labResult->supplies as $supply)
-                    <tr>
-                        <td>{{ $supply->supply->name }}</td>
-                        <td>
-                            {!! Form::text('qty[]',$supply->testqty) !!}
-                            {!! Form::hidden('supply_id[]',$supply->id) !!}
-                        </td>
-                    </tr>
-                    @endforeach    
-                </tbody>
-                
-            </table>
-            <hr>
-            <button type="button" onclick="PrintMeSubmitMe()">Save</button>
-            </div>
-        @endif
         {{ Form::close() }}
 
             <script src="<?php echo asset('public/quirk/lib/jquery/jquery.js') ?>"></script>
@@ -225,14 +207,27 @@
                      }
                  });
             </script>
+            @if(Session::has('done'))
+                <script type="text/javascript">
+                    $(document).ready(function() {
+                        window.top.close();
+                    });
+                </script>
+            @endif
             <script type="text/javascript">
-                
+            
+            function PrintMe() {
+                $(".notSave").hide();
+                window.print();
+            }
 
             function PrintMeSubmitMe()
             {
                 $(".notSave").hide();
+                $(".sticky-nav").hide();
                 window.print();
                 SubmitMe();
+                
             }
 
             function SubmitMe()

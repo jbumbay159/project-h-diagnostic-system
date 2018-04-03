@@ -39,7 +39,7 @@
         		<tr style="text-transform: uppercase;">
         			<th class="text-center">Name</th>
                     <th class="text-center">Minimum Level</th>
-                    <th class="text-center">Qty.</th>
+                    <th class="text-center">Balance on hand</th>
                     <th width="150" class="text-center">Last Updated</th>
                     <th class="text-center">Action</th>
         		</tr>

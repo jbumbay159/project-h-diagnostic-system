@@ -58,22 +58,29 @@
                                 {!! Form::text('service[]',null,['class'=>'form-control']) !!}
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 {!! Form::label('cov','COV:') !!}
                                 {!! Form::text('cov[]',null,['class'=>'form-control']) !!}
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 {!! Form::label('group','Group:') !!}
                                 {!! Form::text('group[]',null,['class'=>'form-control']) !!}
                             </div>
                         </div>
+                        
                         <div class="col-md-2">
                             <div class="form-group">
                                 {!! Form::label('nv','Normal Values:') !!}
                                 {!! Form::text('nv[]',null,['class'=>'form-control']) !!}
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                {!! Form::label('Default Remarks') !!}
+                                {!! Form::text('remarks[]',null,['class'=>'form-control']) !!}
                             </div>
                         </div>
                         <div class="col-md-1">
@@ -185,16 +192,21 @@
             data += '<input type="text" name="service[]" class="form-control" /> ';
             data += '</div></div>';
 
-            data += '<div class="col-md-3"><div class="form-group">';
+            data += '<div class="col-md-2"><div class="form-group">';
             data += '<input type="text" name="cov[]" class="form-control" /> ';
             data += '</div></div>';
 
-            data += '<div class="col-md-3"><div class="form-group">';
+            data += '<div class="col-md-2"><div class="form-group">';
             data += '<input type="text" name="group[]" class="form-control" /> ';
             data += '</div></div>';
 
+
             data += '<div class="col-md-2"><div class="form-group">';
             data += '<input type="text" name="nv[]" class="form-control" /> ';
+            data += '</div></div>';
+
+            data += '<div class="col-md-2"><div class="form-group">';
+            data += '<input type="text" name="remarks[]" class="form-control" /> ';
             data += '</div></div>';
 
             data += '<div class="col-md-1"><div class="form-group">';

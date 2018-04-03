@@ -122,7 +122,7 @@
             <div class="modal-body">    
                 <div class="row">
                     <div class="col-md-12">
-                        <table class="table table-hover table-bordered">
+                        <table id="dataTable1" class="table table-hover table-bordered">
                             <thead>
                                 <th class="text-center">Available Test</th>
                                 <th>Action</th>
@@ -231,7 +231,9 @@
     @foreach($resultHistory as $historyDate => $history)
         @foreach($history as $list)    
             <div class="print-service print-service-history-{{ $list->id }}" style="background-color: #ffffff; color: #000000;  text-align: center;">
-                <a href="{{ action('LabResultController@edit',$list->id) }}{{ ($currentUser->roles()->where('name','administrator')->count() > 0 ) ? '?is_admin=1' : '' }}" class="btn btn-primary btn-lg" style="position: absolute;top: 50%;">Show Result</a>
+                <div style="height: 100%;background-color: #fff;display: block;position: fixed;padding: 3px;border-right: 1px solid;">
+                    <a href="{{ action('LabResultController@edit',$list->id) }}{{ ($currentUser->roles()->where('name','administrator')->count() > 0 ) ? '?is_admin=1' : '' }}" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-eye-open"></span></a>
+                </div>         
             </div>
         @endforeach
     @endforeach
@@ -240,8 +242,10 @@
 <div style="display: none;">
     @foreach($labResults as $data)
     @if( $data->isxray == 0 )
-        <div class="print-service print-service-{{ $data->id }}" style="background-color: #ffffff; color: #000000;  text-align: center;">
-            <a href="{{ action('LabResultController@edit',$data->id) }}" class="btn btn-primary btn-lg" style="position: absolute;top: 50%;">Show Result</a>
+        <div class="print-service print-service-{{ $data->id }}">
+            <div style="height: 100%;background-color: #fff;display: block;position: fixed;padding: 3px;border-right: 1px solid;">
+                <a href="{{ action('LabResultController@edit',$data->id) }}" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-eye-open"></span></a>
+            </div>         
         </div>
     @endif
     @endforeach

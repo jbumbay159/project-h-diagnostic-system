@@ -32,7 +32,7 @@
             <div class="col-md-4">
                 <div class="form-group">
                     {!! Form::label('name','Name') !!}
-                    {!! Form::text('name',null,['class'=>'form-control'])!!}
+                    {!! Form::text('name',null,['class'=>'form-control','style'=>'height: 38px; padding:10px;'])!!}
                 </div>
             </div>
             <div class="col-md-4">
@@ -56,7 +56,19 @@
             </div>
         </div>
         <hr>
-        
+        <style type="text/css">
+            .form-control{
+                padding: 5px;
+                height: 30px;
+            }
+            #bot{
+                margin-top: 22px;
+                padding: 5px 10px;
+            }
+            .minus{
+                margin-top: 0px !important;
+            }
+        </style>
         <div class="clearfix"></div>
         <div id="form-not-xray">
             <div id="wrap">
@@ -65,17 +77,18 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 {!! Form::label('service','Test:') !!}
-                                {!! Form::text('service[]',null,['class'=>'form-control']) !!}
+                                {!! Form::text('service[]',null,['class'=>'form-control input-sm']) !!}
                                 {!! Form::hidden('id[]','no',['class'=>'form-control']) !!}
                             </div>
                         </div>
-                        <div class="col-md-3">
+
+                        <div class="col-md-2">
                             <div class="form-group">
                                 {!! Form::label('cov','COV:') !!}
                                 {!! Form::text('cov[]',null,['class'=>'form-control']) !!}
                             </div>
                         </div>
-                        <div class="col-md-3">
+                       <div class="col-md-2">
                             <div class="form-group">
                                 {!! Form::label('group','Group:') !!}
                                 {!! Form::text('group[]',null,['class'=>'form-control']) !!}
@@ -85,6 +98,12 @@
                             <div class="form-group">
                                 {!! Form::label('nv','Normal Values:') !!}
                                 {!! Form::text('nv[]',null,['class'=>'form-control']) !!}
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                {!! Form::label('Remarks') !!}
+                                {!! Form::text('remarks[]',null,['class'=>'form-control']) !!}
                             </div>
                         </div>
                         <div class="col-md-1">
@@ -106,13 +125,13 @@
                                     {!! Form::hidden('id[]',$data->id,['class'=>'form-control']) !!}
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     {!! Form::label('cov','COV:') !!}
                                     {!! Form::text('cov[]',$data->cov,['class'=>'form-control']) !!}
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     {!! Form::label('group','Group:') !!}
                                     {!! Form::text('group[]',$data->group,['class'=>'form-control']) !!}
@@ -121,7 +140,13 @@
                             <div class="col-md-2">
                                 <div class="form-group">
                                     {!! Form::label('nv','Normal Values:') !!}
-                                    {!! Form::text('nv[]',$data->nv,['class'=>'form-control']) !!}
+                                    {!! Form::textarea('nv[]',$data->nv,['class'=>'form-control','size'=>'1x1']) !!}
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    {!! Form::label('Remarks') !!}
+                                    {!! Form::text('remarks[]',$data->remarks,['class'=>'form-control']) !!}
                                 </div>
                             </div>
                             <div class="col-md-1">
@@ -132,28 +157,34 @@
                         </div>
                     @else
                         <div class="clearfix"></div>
-                        <div class="wrapp{{ $x++ }}" style="margin-top:20px;">
+                        <div class="wrapp{{ $x++ }}" style="margin-top:10px;">
                             <div class="col-md-3">
                                 <div class="form-group">
                                     {!! Form::text('service[]',$data->service,['class'=>'form-control']) !!}
                                     {!! Form::hidden('id[]',$data->id,['class'=>'form-control']) !!}
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     {!! Form::text('cov[]',$data->cov,['class'=>'form-control']) !!}
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     {!! Form::text('group[]',$data->group,['class'=>'form-control']) !!}
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    {!! Form::text('nv[]',$data->nv,['class'=>'form-control']) !!}
+                                    {!! Form::textarea('nv[]',$data->nv,['class'=>'form-control','size'=>'1x1']) !!}
                                 </div>
                             </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    {!! Form::text('remarks[]',$data->remarks,['class'=>'form-control']) !!}
+                                </div>
+                            </div>
+
                             <div class="col-md-1">
                                 <div class="form-group">
                                     <button type="button" class="btn btn-default btn-quirk  minus" id="bot"><i class="fa fa-minus" aria-hidden="true"></i></button>
@@ -276,7 +307,7 @@
 
             supdata += '<div class="col-md-1">';
             supdata += '<div class="form-group">';
-            supdata += '<button type="button" class="btn btn-default btn-quirk minus"><i class="fa fa-minus" aria-hidden="true"></i></button>';
+            supdata += '<button type="button" class="btn btn-default btn-quirk minus" style="padding: 5px 10px;margin-top: 0px !important;"><i class="fa fa-minus" aria-hidden="true"></i></button>';
             supdata += '</div></div></div></div>';
 
             $('#supply-group').append(supdata);
@@ -296,25 +327,30 @@
         var x = {{ $x++ }};
         $('#bot').on('click',function(){
         x++;
-        var data =  '<div class="clearfix"></div><div class="wrapp'+x+'" style="margin-top:20px;"><div class="clearfix"></div>';
+        var data =  '<div class="clearfix"></div><div class="wrapp'+x+'" style="margin-top:10px;"><div class="clearfix"></div>';
             data += '<div class="col-md-3"><div class="form-group">';
             data += '<input type="text" name="service[]" class="form-control" /><input type="hidden" name="id[]" class="form-control" value="no" /> ';
             data += '</div></div>';
 
-            data += '<div class="col-md-3"><div class="form-group">';
+            data += '<div class="col-md-2"><div class="form-group">';
             data += '<input type="text" name="cov[]" class="form-control" /> ';
             data += '</div></div>';
 
-            data += '<div class="col-md-3"><div class="form-group">';
+            data += '<div class="col-md-2"><div class="form-group">';
             data += '<input type="text" name="group[]" class="form-control" /> ';
             data += '</div></div>';
 
+
             data += '<div class="col-md-2"><div class="form-group">';
-            data += '<input type="text" name="nv[]" class="form-control" /> ';
+            data += '{!! Form::textarea("nv[]",NULL,["class"=>"form-control","size"=>"1x1"]) !!}';
+            data += '</div></div>';
+
+            data += '<div class="col-md-2"><div class="form-group">';
+            data += '<input type="text" name="remarks[]" class="form-control" /> ';
             data += '</div></div>';
 
             data += '<div class="col-md-1"><div class="form-group">';
-            data += '<button type="button" class="btn btn-default btn-quirk minus" ><i class="fa fa-minus" aria-hidden="true"></i></button>';
+            data += '<button type="button" class="btn btn-default btn-quirk minus"  style="padding: 5px 10px;margin-top: 0px !important;"><i class="fa fa-minus" aria-hidden="true"></i></button>';
             data += '</div></div></div>';
 
             $('#wrap').append(data);

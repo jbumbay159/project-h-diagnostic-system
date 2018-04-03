@@ -24,7 +24,6 @@
 			}
 
 			.content{
-				
 				  list-style: none;
 				  padding: 0;
 				  margin: 0;
@@ -87,15 +86,15 @@
 					</center>
 				</div>
 			</div>
-			<hr style="border: 1px solid;">
+			<hr style="border: 1px solid;    margin: 0px;">
 			@if( $service->covnv('nv') == true || $service->covnv('cov') == true )
-				<div class="row spacing">
+				<div class="row">
 					<div class="col-md-12">
 						<div class="">
 							@foreach($service->item()->get()->groupBy('group') as $groupName => $serviceItem) 
 								<table style="width: 100%;">
 									<thead>
-										<th><u>{{ $groupName }}:</u></th>
+										<th><u>{{ $groupName }}</u></th>
 										<th><u><center>RESULT</center></u></th>
 
 										@if($service->covnv('cov') == true)
@@ -115,7 +114,7 @@
 												<td><center>{{ $data->cov }}</center></td>
 											@endif
 											@if($service->covnv('nv') == true)
-												<td><center>{{ $data->nv }}</center></td>
+												<td><center>{!! nl2br($data->nv) !!}</center></td>
 											@endif
 											<td class="text">&nbsp;</center></td>
 										</tr>
@@ -133,12 +132,12 @@
 							@foreach($service->item()->get()->groupBy('group') as $groupName => $serviceItem) 
 								<table style="width: 100%;">
 									<thead>
-										<th width="250px"><u>{{ $groupName }}</u></th>
-										<th width="150px"><center>&nbsp;</center></th>
+										<th width="250px"><u>{{ ($groupName != NULL) ? $groupName : 'Test' }}</u></th>
+										<th width="150px"><center>RESULT</center></th>
 									</thead>
 									<tbody>
 										@foreach( $serviceItem as $data )
-										<tr>
+										<tr style="font-size: 14px;">
 											<td style="padding: 0px;">{{ $data->service }}:</td>
 											<td style="padding: 0px;" class="text">&nbsp;</center></td>
 										</tr>

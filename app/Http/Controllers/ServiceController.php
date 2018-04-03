@@ -68,13 +68,14 @@ class ServiceController extends Controller
 
         if (Request::get('is_xray') == NULL) {
             foreach(Request::get('service') as $key => $value){
-                if (!empty($value)) {
+                if ($value != NULL) {
                     $data = [
                         'service_id'        =>      $service->id,
                         'service'           =>      $value,
                         'cov'               =>      Request::get('cov')[$key],
                         'nv'                =>      Request::get('nv')[$key],
                         'group'             =>      Request::get('group')[$key],
+                        'remarks'           =>      Request::get('remarks')[$key],
                     ];
                     Service_item::create($data);
                 }
@@ -157,19 +158,22 @@ class ServiceController extends Controller
         $ids[] = "";
         if (!empty($all['id']) AND $xrayVar == 0 ) {
             foreach ($all['id'] as $key => $value) {
-                $data = [
-                    'service'           =>      $all['service'][$key],
-                    'cov'               =>      $all['cov'][$key],
-                    'nv'                =>      $all['nv'][$key],
-                    'group'                =>      $all['group'][$key],
-                ];
-                if ($value == "no") {
-                    $item_id = $service->item()->create($data)->id;
-                    $ids[] = $item_id;
-                }else{
-                    $item = Service_item::findOrFail($value);
-                    $item->update($data);
-                    $ids[] = $value;
+                if ($all['service'][$key] != NULL) {
+                    $data = [
+                        'service'           =>      $all['service'][$key],
+                        'cov'               =>      $all['cov'][$key],
+                        'nv'                =>      $all['nv'][$key],
+                        'group'                =>      $all['group'][$key],
+                        'remarks'                =>      $all['remarks'][$key],
+                    ];
+                    if ($value == "no") {
+                        $item_id = $service->item()->create($data)->id;
+                        $ids[] = $item_id;
+                    }else{
+                        $item = $service->item()->findOrFail($value);
+                        $item->update($data);
+                        $ids[] = $value;
+                    }
                 }
             }
         }

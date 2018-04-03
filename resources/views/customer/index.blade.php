@@ -15,7 +15,7 @@
 		</div>
 	</div>
 	<div class="panel-body">
-        <table id="dataTable1" class="table table-bordered table-striped-col" style="text-transform: uppercase;">
+        <table id="dataTable1" class="table table-bordered table-hover table-striped" style="text-transform: uppercase;">
         	<thead>
         		<tr>
         			<th class="text-center">Customer ID</th>
