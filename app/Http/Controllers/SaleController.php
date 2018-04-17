@@ -27,7 +27,7 @@ class SaleController extends Controller
     public function index()
     {
         // $customer = Customer::select(DB::raw("concat(last_name,', ',first_name,' ',middle_name ) AS name"), 'id')->pluck('name','id');
-        $customer = Customer::all()->pluck('fullName', 'id');
+        $customer = Customer::orderBy('last_name')->get()->pluck('fullName', 'id');
         return view('sale.index', compact('customer'));
     }
 

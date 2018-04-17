@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Transmittal extends Model
 {
@@ -21,6 +22,11 @@ class Transmittal extends Model
     public function getAgencyNameAttribute()
     {
         return $this->agency->name;
+    }
+
+    public function getEncodeDateNameAttribute()
+    {
+        return Carbon::parse($this->encode_date)->format('F j, Y ');
     }
     
 }

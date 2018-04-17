@@ -31,8 +31,9 @@ class ReportController extends Controller
     		$date_from = Request::get('date_from');
 		    $date_to = Request::get('date_to');
 
-		    $salesPayment = Sale::where('payment_id',1)->whereDate('created_at','>=',$date_from)->whereDate('created_at','<=',$date_to)->get()->groupBy('transcode');
-            $billedPayment = Sale::where('payment_id',2)->whereDate('created_at','>=',$date_from)->whereDate('created_at','<=',$date_to)->get()->groupBy('transcode');
+		    $salesPayment = Sale::where('payment_id',1)->whereDate('created_at','>=',$date_from)->whereDate('created_at','<=',$date_to)->orderBy('created_at')->get()->groupBy('transcode');
+            $billedPayment = Sale::where('payment_id',2)->whereDate('created_at','>=',$date_from)->whereDate('created_at','<=',$date_to)->orderBy('created_at')->get()->groupBy('transcode');
+
 		    return view('report.saleDailyResult', compact('salesPayment','billedPayment','date_from','date_to'));
     	}else{
     		return view('report.saleDaily');	
@@ -166,7 +167,7 @@ class ReportController extends Controller
             $trasmittalStatus = $trasmittalStatus->where('status_id',Request::get('status'));
         }
 
-        $trasmittalStatus = $trasmittalStatus->get()->groupBy('agencyName');
+        $trasmittalStatus = $trasmittalStatus->get();
 
         if (Request::get('print') != NULL) {
             return view('report.statusResult', compact('agencies','status','dateNow','trasmittalStatus','date_to','date_from'));

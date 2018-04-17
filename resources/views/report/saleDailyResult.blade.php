@@ -2,11 +2,20 @@
 	use App\SaleDiscount;
 @endphp
 
+
 <!DOCTYPE html>
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="{{ asset('public/css/print.css') }}">
 		<title> </title>
+		<style type="text/css">
+			th{
+				padding: 0px !important;
+			}
+			td{
+				padding: 0px !important;
+			}
+		</style>
 	</head>
 	<body>
 		<div class="container">
@@ -16,7 +25,7 @@
 					<h4 class="text-center">Company Address</h4>
 					<hr>
 					<h3 class="text-center">DAILY COLLECTIONS</h3>
-					<h4 class="text-center">Date Covered: {{ \Carbon\Carbon::parse($date_from)->toFormattedDateString() }} - {{ \Carbon\Carbon::parse($date_to)->toFormattedDateString() }}</h4>
+					<h4 class="text-center">Date Covered: {{ \Carbon\Carbon::parse($date_from)->format('F j, Y ') }} - {{ \Carbon\Carbon::parse($date_to)->format('F j, Y ') }}</h4>
 				</div>
 			</div>
 			<div style="margin-top:10px;"></div>
@@ -54,15 +63,15 @@
 									$fullName = $data->customer->fullName;
 									$agency = $data->agency->name;
 									$payment_id = $data->payment_id;
-									$totalPrice += $data->total_price
+									$totalPrice += $data->total_price;
 								@endphp
 							@endforeach
 						<tr>
 							<td class="text-center">{{ $transcode }}</td>
-							<td class="text-center">{{ \Carbon\Carbon::parse($date)->toFormattedDateString() }}</td>
+							<td class="text-center">{{ \Carbon\Carbon::parse($date)->format('F j, Y ') }}</td>
 							<td class="text-center">{{ $fullName }}</td>
 							<td class="text-center">{{ $agency }}</td>
-							<td class="text-center">{{ ($payment_id == 1) ? 'CASH' : 'BILLED' }}</td>
+							<td class="text-center">{{ ($data->payment_id == 1) ? 'CASH' : 'BILLED' }}</td>
 							<td class="text-right">{{ number_format($totalPrice - $totalDiscount,2) }}</td>
 							@php 
 
@@ -96,7 +105,7 @@
 						@php
 							$totalBilled = 0;
 						@endphp
-						@foreach( $billedPayment as $data)
+						@foreach( $billedPayment as $transcode => $sales)
 							@php
 								$saleDiscount = SaleDiscount::where('transcode',$transcode)->first();
 								if( $saleDiscount != NULL ){
@@ -112,15 +121,15 @@
 									$fullName = $data->customer->fullName;
 									$agency = $data->agency->name;
 									$payment_id = $data->payment_id;
-									$totalPrice += $data->total_price
+									$totalPrice += $data->total_price;
 								@endphp
 							@endforeach
 						<tr>
 							<td class="text-center">{{ $transcode }}</td>
-							<td class="text-center">{{ \Carbon\Carbon::parse($date)->toFormattedDateString() }}</td>
+							<td class="text-center">{{ \Carbon\Carbon::parse($date)->format('F j, Y ') }}</td>
 							<td class="text-center">{{ $fullName }}</td>
 							<td class="text-center">{{ $agency }}</td>
-							<td class="text-center">{{ ($payment_id == 1) ? 'CASH' : 'BILLED' }}</td>
+							<td class="text-center">{{ ($data->payment_id == 1) ? 'CASH' : 'BILLED' }}</td>
 							<td class="text-right">{{ number_format($totalPrice - $totalDiscount,2) }}</td>
 							@php 
 								$totalBilled +=($totalPrice - $totalDiscount ); 

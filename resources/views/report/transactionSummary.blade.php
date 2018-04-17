@@ -15,7 +15,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         {!! Form::label('Date from') !!}
-                        {!! Form::text('date',null,['class'=>'form-control dt','placeholder'=>'SELECT DATE FROM']) !!}
+                        {!! Form::text('date_from',null,['class'=>'form-control dt','placeholder'=>'SELECT DATE FROM']) !!}
                     </div>
                 </div>
                 <div class="col-md-3">

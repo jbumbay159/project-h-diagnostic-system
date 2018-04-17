@@ -20,7 +20,7 @@ class XrayController extends Controller
     
     public function index()
     {
-        $customer = Customer::get()->pluck('fullName','id');
+        $customer = Customer::orderBy('last_name')->get()->pluck('fullName','id');
         $info = NULL;
         $labResults = NULL;
         $currentUser = Auth::user();

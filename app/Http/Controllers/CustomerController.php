@@ -62,6 +62,35 @@ class CustomerController extends Controller
 
     	return view('customer.create', compact('agency','package','association','country'));
     }
+
+    public function checkCustomer()
+    {
+        $all = Request::all();
+
+        $customer = Customer::where('last_name',$all['last_name'])
+                        ->where('first_name',$all['first_name'])
+                        ->where('middle_name',$all['middle_name'])
+                        ->where('name_extension',$all['name_extension'])
+                        ->where('gender',$all['gender'])
+                        ->whereDate('birthdate','=',$all['birthdate'])
+                        ->first();
+
+        if ($customer != null) {
+            $htmlDev = '<div class="alert alert-danger">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    The Customer Already Exist <a href="'.action('CustomerController@edit',$customer->id).'">Click Here</a>
+                    </div>';
+
+
+        }else{
+            $htmlDev = "";
+        }
+
+
+        
+        $data[] = ['value' => $htmlDev];
+        return $data;
+    }
     
     public function store()
     {
@@ -543,7 +572,7 @@ class CustomerController extends Controller
                 $labResult->items()->create($itemData);
             }
 
-            foreach ($service->supplies as $supply) {
+            foreach ($services->supplies as $supply) {
                 $supplyData = [
                     'customer_id' => $info->id,
                     'sale_id' => $sale->id,

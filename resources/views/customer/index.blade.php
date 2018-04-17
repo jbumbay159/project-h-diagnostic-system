@@ -15,7 +15,7 @@
 		</div>
 	</div>
 	<div class="panel-body">
-        <table id="dataTable1" class="table table-bordered table-hover table-striped" style="text-transform: uppercase;">
+        <table id="dataTable1" class="table table-bordered table-hover" style="text-transform: uppercase;">
         	<thead>
         		<tr>
         			<th class="text-center">Customer ID</th>
@@ -36,7 +36,7 @@
               				<td>{{ $data->country()->orderBy('created_at','desc')->first()->name }}</td>
               				<td class="text-center" width="80" style="text-transform: uppercase; padding: 5px;">
 	                            <div class="btn-group">
-	                                <button type="button" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-cog"></span></button>
+	                                
 	                                <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown">
 	                                    <span class="caret"></span>
 	                                    <span class="sr-only">Toggle Dropdown</span>

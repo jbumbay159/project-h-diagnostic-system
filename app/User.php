@@ -59,6 +59,14 @@ class User extends Authenticatable
         return null !== $this->roles()->where('name', $role)->first();
     }
 
-    
+    public function hasChecked($role)
+    {
+        $checkRole = $this->roles()->where('name', $role)->first();
+        if ($checkRole != null) {
+            return true;
+        }else{
+            return false;
+        }
+    }
     
 }

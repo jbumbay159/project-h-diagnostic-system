@@ -25,8 +25,8 @@ class LabResultController extends Controller
     public function index()
     {
         // $customer = Customer::select(DB::raw("concat(last_name,', ',first_name,' ',middle_name ) AS name"), 'id')->pluck('name','id');
-        $array = Customer::get();
-        $customer = array_pluck($array, 'fullName', 'id');
+        $customer = Customer::orderBy('last_name')->get()->pluck('fullName','id');
+        // $customer = array_pluck($array, 'fullName', 'id');
 
         return view('lab-result.index', compact('customer'));
     }

@@ -1,5 +1,5 @@
 <?php
-
+date_default_timezone_set('Asia/Manila');
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -10,6 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 
 Auth::routes();
 
@@ -29,6 +30,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('customer', 'CustomerController', ['except' => ['destroy']]);
 Route::get('customer/data','CustomerController@data');
 
+Route::post('customer/check','CustomerController@checkCustomer');
 Route::post('customer/load-data', 'CustomerController@loadData');
 Route::get('customer/open-finger/{id}', 'CustomerController@openFinger');
 Route::get('customer/{id}/photo', 'CustomerController@photo');
@@ -83,6 +85,9 @@ Route::post('inventory/return/add','InventoryController@addReturnItem');
 Route::delete('inventory/return/remove/{id}','InventoryController@removeReturnItem');
 Route::patch('inventory/return/edit/{id}','InventoryController@editReturnItem');
 
+Route::get('inventory/lab-usage','InventoryController@labUsage');
+Route::post('inventory/lab-usage/create','InventoryController@addLabUsage');
+
 Route::resource('inventory','InventoryController', ['except' => ['destroy']]);
 
 
@@ -119,6 +124,8 @@ Route::get('xray-result-radiologist/{id}/print','XrayController@radiologistPrint
 // Vaccing Section
 Route::resource('vaccine','VaccineController', ['except' => ['destroy','create']]);
 
+// Setting Section
+Route::resource('settings/users', 'SettingUserController', ['except' => ['destroy']]);
 
 // Settings Section
 Route::resource('settings','SettingController', ['except' => ['destroy','create']]);

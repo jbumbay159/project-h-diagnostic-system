@@ -47,26 +47,23 @@
         <hr>
         <div class="row spacing">
             <div class="col-md-12">
-                <table class="table table-bordered table-hover">
+                <table id="status" class="table table-bordered table-hover">
                     <thead>
                         <th>Name</th>
-                        <th class="text-center">Encode Date</th>
+                        <th class="text-center" width="70px">Encode Date</th>
+                        <th>Agency</th>
                         <th class="text-center">Status</th>
                         <th class="text-center">Remarks</th>
                     </thead>
                     <tbody>
-                        @foreach($trasmittalStatus as $agency => $lists)
+                        @foreach($trasmittalStatus as $list)
                             <tr>
-                                <td colspan="3"><b>{{ $agency }}</b></td>
+                                <td>{{ $list->customer->fullName }}</td>
+                                <td class="text-center">{{ $list->encodeDateName }}</td>
+                                <td>{{ $list->agency->name }}</td>
+                                <td class="text-center">{{ $list->status }}</td>
+                                <td>{{ $list->remarks }}</td>
                             </tr>
-                            @foreach($lists as $list)
-                                <tr>
-                                    <td>{{ $list->customer->fullName }}</td>
-                                    <td class="text-center">{{ $list->encodeDateName }}</td>
-                                    <td class="text-center">{{ $list->status }}</td>
-                                    <td>{{ $list->remarks }}</td>
-                                </tr>
-                            @endforeach
                         @endforeach
                     </tbody>
                 </table>
@@ -74,5 +71,45 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('js')
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var table = $('#status').DataTable({
+                "columnDefs": [
+                    { "visible": false, "targets": 2 }
+                ],
+                "order": [[ 2, 'asc' ]],
+                "displayLength": 25,
+                "drawCallback": function ( settings ) {
+                    var api = this.api();
+                    var rows = api.rows( {page:'current'} ).nodes();
+                    var last=null;
+         
+                    api.column(2, {page:'current'} ).data().each( function ( group, i ) {
+                        if ( last !== group ) {
+                            $(rows).eq( i ).before(
+                                '<tr class="group info"><td colspan="4" style="font-weight: bold;">'+group+'</td></tr>'
+                            );
+         
+                            last = group;
+                        }
+                    } );
+                }
+            } );
+         
+            // Order by the grouping
+            $('#status tbody').on( 'click', 'tr.group', function () {
+                var currentOrder = table.order()[0];
+                if ( currentOrder[0] === 2 && currentOrder[1] === 'asc' ) {
+                    table.order( [ 2, 'desc' ] ).draw();
+                }
+                else {
+                    table.order( [ 2, 'asc' ] ).draw();
+                }
+            } );
+        } );
+    </script>
 @endsection
 

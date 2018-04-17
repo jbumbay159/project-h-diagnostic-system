@@ -23,4 +23,9 @@ class InventoryLabResultItem extends Model
     {
     	return $this->hasOne('App\Supply','id','supply_id');
     }
+
+    public function customer()
+    {
+        return $this->hasOne('App\Customer','id','customer_id');
+    }
 }

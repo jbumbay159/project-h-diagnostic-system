@@ -67,6 +67,9 @@
 						<td style="text-align: center;font-weight: bold">Particulars</td>
 						<td style="text-align: center;font-weight: bold">Amount</td>
 					</tr>
+					@php
+						$totalAmount = 0;
+					@endphp
 					@foreach( $transList as $list )
 					@php
 						$totalAmount += $list->total_price;

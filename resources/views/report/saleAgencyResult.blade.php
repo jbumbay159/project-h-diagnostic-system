@@ -103,8 +103,15 @@
 						</tr>
 					</thead>
 					<tbody>
-						@foreach($agencyData->sales()->where('payment_id',2)->whereDate('created_at','>=',$date_from)->whereDate('created_at','<=',$date_to)->get() as $data)
+						@foreach($agencyData->sales()->where('payment_id',2)->whereDate('created_at','>=',$date_from)->whereDate('created_at','<=',$date_to)->get()->groupBy('transcode') as $transcode => $sales)
+						
 							@php
+								$saleDiscount = SaleDiscount::where('transcode',$transcode)->first();
+								if( $saleDiscount != NULL ){
+									$totalDiscount = $saleDiscount->amount;
+								}else{
+									$totalDiscount = 0;
+								}	
 								$totalPrice = 0;
 							@endphp
 							@foreach($sales as $data)
@@ -113,7 +120,7 @@
 									$fullName = $data->customer->fullName;
 									$agency = $data->agency->name;
 									$payment_id = $data->payment_id;
-									$totalPrice += $data->total_price
+									$totalPrice += $data->total_price;
 								@endphp
 							@endforeach
 
@@ -122,8 +129,8 @@
 							<td class="text-center">{{ \Carbon\Carbon::parse($date)->toFormattedDateString() }}</td>
 							<td class="text-center">{{ $fullName }}</td>
 							<td class="text-center">{{ ($payment_id == 1) ? 'CASH' : 'BILLED' }}</td>
-							<td class="text-right"><b>{{ number_format($data->total_price,2) }}</b></td>
-							<?php $a +=$totalPrice; ?>
+							<td class="text-right"><b>{{ number_format($data->total_price - $totalDiscount,2) }}</b></td>
+							<?php $a +=$totalPrice - $totalDiscount; ?>
 						</tr>
 						@endforeach
 						<tr>

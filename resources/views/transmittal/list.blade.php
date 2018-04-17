@@ -71,7 +71,7 @@
                         <h4 class="text-center">Company Address</h4>
                         <hr>
                         <h4 class="text-center">Agency/Account Group: <strong>{{ $agency }}</strong></h4>      
-                        <h4 class="text-center">Date Covered: {{ \Carbon\Carbon::parse($date_from)->toFormattedDateString() }} - {{ \Carbon\Carbon::parse($date_to)->toFormattedDateString() }}</h4>                  
+                        <h4 class="text-center">Date Covered: {{ \Carbon\Carbon::parse($date_from)->format('F j, Y ') }} - {{ \Carbon\Carbon::parse($date_to)->format('F j, Y ') }}</h4>                  
                     </div>
                 </div>
                 <div style="margin-top:10px;"></div>
@@ -83,9 +83,8 @@
                             $trans = $info->transmittal()->orderBy('created_at', 'DESC')->first();
                         @endphp
                         <p class="h4">{{ $info->last_name.', '.$info->first_name.' '.$info->middle_name.' '.$info->name_extension }}</p>
-                        <p>Date of Expiration: {{ \Carbon\Carbon::parse($trans->created_at)->addDays($trans->days)->toFormattedDateString() }}</p>
+                        <p style="color:red;">Date of Expiration: {{ \Carbon\Carbon::parse($trans->expiry_date)->format('F j, Y ') }}</p>
                         
-
                         <table style="text-transform: uppercase;font-size: 12px;background-color: #ffffff;width: 100%;  ">
                             <thead>
                                 <tr>
@@ -98,7 +97,7 @@
                                 @foreach ( $listData as $data )
                                     @if ( $data->encode_date != NULL )
                                         <tr style="border-top: 2px solid #ddd;">
-                                            <td style="padding: 10px 0px;">{{ \Carbon\Carbon::parse($data->encode_date)->toFormattedDateString() }}</td>   
+                                            <td style="padding: 10px 0px;">{{ \Carbon\Carbon::parse($data->encode_date)->format('F j, Y ') }}</td>   
                                             <td style="padding: 10px 0px;">{{ $data->status }}</td>    
                                             <td style="padding: 10px 0px;">{{ $data->remarks }} {{ ( $data->exp_display == 1 ) ? ' Expiry Date:'.Carbon::parse($data->expiry_date)->toFormattedDateString() : '' }}</td>   
                                         </tr>
@@ -111,7 +110,7 @@
                 </div>
                 <div class="row spacing">
                     <div class="col-md-12">
-                        <p>PREPARED BY: CASHIER NAME HERE</p>
+                        <p>PREPARED BY: {{ Auth::user()->fullName }}</p>
                     </div>
                 </div>
             </div>

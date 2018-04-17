@@ -154,7 +154,7 @@ class TransmittalController extends Controller
             $date_from = Request::get('date_from');
             $date_to =  Request::get('date_to');
 
-            $transmittal = Transmittal::whereDate('created_at','>=',$date_from)->whereDate('created_at','<=',$date_to)->get()->groupBy('agencyName');   
+            $transmittal = Transmittal::whereDate('encode_date','>=',$date_from)->whereDate('encode_date','<=',$date_to)->with(['customer'])->get()->groupBy('agencyName');   
             $dateExist = true;
         }else{
             $date_from = NULL;

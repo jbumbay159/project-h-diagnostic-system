@@ -9,6 +9,8 @@ use Carbon\Carbon;
 use App\InventoryReceive;
 use App\InventoryReceiveItem;
 use App\InventoryReturn;
+use App\Customer;
+use App\InventoryLabResultItem;
 
 
 class InventoryController extends Controller
@@ -356,6 +358,27 @@ class InventoryController extends Controller
             return view('inventory.filter',compact('supplies','type','itemArray'));    
         }
         
+    }
+
+    public function labUsage()
+    {
+        $customers = Customer::orderBy('last_name')->get()->pluck('fullName', 'id');
+        $supply = Supply::pluck('name','id');
+        $items = InventoryLabResultItem::get();
+
+
+        return view('inventory.lab-usage',compact('supply','customers','items'));
+    }
+
+    public function addLabUsage()
+    {
+        $all = Request::all();
+        $all = array_add($all, 'status', 1);
+        $item = InventoryLabResultItem::create($all);
+
+
+        session()->flash('success_message', 'Item Added Successfully..');
+        return redirect()->back();
     }
     
 }

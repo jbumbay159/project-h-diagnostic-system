@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -16,7 +15,7 @@
         <link rel="stylesheet" href="{{ asset('public/css/all.css') }}">
         <link rel="stylesheet" href="{{ asset('public/quirk/css/quirk.css') }}">
 
-        <script src="<?php echo asset('quirk/lib/modernizr/modernizr.js') ?>"></script>
+        <script src="{{ asset('public/quirk/lib/modernizr/modernizr.js') }}"></script>
         <style type="text/css">
             .spacing{margin-top: 15px;}
             .select2-dropdown {z-index: 9001;}
@@ -161,7 +160,7 @@
                                     <a href=""><i class="fa fa-check-square"></i> <span>Sales</span></a>
                                     <ul class="children">
                                         <li class="{{ Request::is('sale/*') || Request::is('sale') ? 'active' : '' }}"><a href="{{ url('sale') }}">Search</a></li>
-                                         <li class="{{ Request::is('transaction/*') || Request::is('transaction') ? 'active' : '' }}"><a href="{{ url('transaction') }}">Transaction</a></li>
+                                         <li class="{{ Request::is('transaction/*') || Request::is('transaction') ? 'active' : '' }}"><a href="{{ url('transaction') }}">Void Sales</a></li>
                                     </ul>
                                 </li>
                                 <li class="nav-parent {{ Request::is('inventory/*') || Request::is('inventory') ? 'active' : '' }}">
@@ -170,6 +169,7 @@
                                         <li class="{{ Request::is('inventory') ? 'active' : '' }}"><a href="{{ url('inventory') }}">Item List</a></li>
                                         <li class="{{ Request::is('inventory/receive') ? 'active' : '' }}"><a href="{{ url('inventory/receive') }}">Receive Items</a></li>
                                         <li class="{{ Request::is('inventory/return') ? 'active' : '' }}"><a href="{{ url('inventory/return') }}">Return Items</a></li>
+                                        <li class="{{ Request::is('inventory/lab-usage') ? 'active' : '' }}"><a href="{{ action('InventoryController@labUsage') }}">Laboratory Usage</a></li>
                                     </ul>
                                 </li>
                                 <li class="nav-parent {{ Request::is('report/*') || Request::is('report') ? 'active' : '' }}">
@@ -197,8 +197,12 @@
                                         <li class="{{ Request::is('agency-pricing/*') || Request::is('agency-pricing') ? 'active' : '' }}"><a href="{{ url('agency-pricing') }}">Agency Pricing </a></li>
                                     </ul>
                                 </li>
-                                <li class="{{ Request::is('supplies') ? 'active' : '' }}" >    
-                                    <a href="{{ url('settings') }}"><i class="fa fa-cog"></i> <span>Settings</span></a>
+                                <li class="nav-parent {{ Request::is('supplies') ? 'active' : '' }}" >    
+                                    <a href=""><i class="fa fa-cog"></i> <span>Settings</span></a>
+                                    <ul class="children">
+                                        <li><a href="{{ url('settings') }}">General Settings</a></li>
+                                        <li><a href="{{ url('settings/users') }}">User List</a></li>
+                                    </ul>
                                 </li>
                             </ul>
                             <h5 class="sidebar-title">Security</h5>
@@ -266,6 +270,5 @@
         </script>
         @yield('js')
         @stack('scripts')
-
     </body>
 </html>

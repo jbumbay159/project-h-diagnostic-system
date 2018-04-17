@@ -12,7 +12,7 @@
                 <a href="#discount" data-toggle="modal" class="btn btn-primary">Discount</a>
                 <a href="#add-service" data-toggle="modal" class="btn btn-primary">Add Services</a>
                 <a href="#accept-payment" data-toggle="modal" class="btn btn-success">Accept Payment</a>
-            @elseif($saleFirst->status == 1)
+            @else
                 <a href="{{ action('SaleController@printPayment',$trans) }}" target="_blank" class="btn btn-success">Print</a>
             @endif
         </div>

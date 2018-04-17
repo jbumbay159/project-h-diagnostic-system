@@ -37,9 +37,9 @@
                         <th>Name</th>
                         <th class="text-center">Test</th>
                     </thead>
-                    @foreach($items->groupBy('supplyName') as $name => $item)
+                    @foreach($items->groupBy('supply_id') as $name => $item)
                         <tr>
-                            <td>{{ $name }}</td>
+                            <td>{{ \App\Supply::findOrFail($name)->name }}</td>
                             <td class="text-center">{{ $item->sum('testqty') }} TEST</td>
                         </tr>
                     @endforeach
